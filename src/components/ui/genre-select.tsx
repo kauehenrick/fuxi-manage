@@ -18,15 +18,15 @@ import { cn } from "@/lib/utils";
 import { useGenreStore } from "@/stores/GenreStore";
 
 type GenreSelectProps = {
-	value?: string;
-	onChange: (value: string) => void;
+	value?: number;
+	onChange: (value: number) => void;
 };
 
 export default function GenreSelect({ value, onChange }: GenreSelectProps) {
 	const { genres } = useGenreStore();
 	const [open, setOpen] = useState(false);
 
-	const items = genres.filter((e) => e.isActive);
+	const items = genres.filter((e) => !e.deleted_at);
 
 	const selectedGenre = items.find((g) => g.id === value);
 
@@ -53,9 +53,9 @@ export default function GenreSelect({ value, onChange }: GenreSelectProps) {
 							{items.map((genre) => (
 								<CommandItem
 									key={genre.id}
-									value={genre.name}
+									value={String(genre.id)}
 									onSelect={() => {
-										onChange(genre.id);
+										onChange(genre.id || 0);
 										setOpen(false);
 									}}
 								>

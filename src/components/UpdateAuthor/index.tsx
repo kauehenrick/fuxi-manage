@@ -27,7 +27,6 @@ export default function UpdateAuthor(author: AuthorProps) {
 		resolver: zodResolver(authorFormSchema),
 		defaultValues: {
 			id: author.id,
-			isActive: author.isActive,
 			name: author.name,
 		},
 	});
@@ -52,7 +51,12 @@ export default function UpdateAuthor(author: AuthorProps) {
 					<DialogTitle>Atualizar Autor</DialogTitle>
 					<DialogDescription></DialogDescription>
 				</DialogHeader>
-				<form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+				<form
+					className="space-y-6"
+					onSubmit={form.handleSubmit(onSubmit, (errors) => {
+						console.error("ERROS:", errors);
+					})}
+				>
 					<section className="flex items-start gap-3 bg-white-300 border rounded-md px-3 py-2">
 						<Controller
 							name="name"

@@ -6,9 +6,13 @@ export default function HomePage() {
 		<div className="flex">
 			<Sidebar />
 
-			<main className="flex flex-col w-full items-start">
+			<div className="flex flex-col w-full items-start">
 				<Header pageName="Tela inicial" />
-			</main>
+
+				<main className="w-full px-6 mt-4">
+					<h1>Olá usuário, seja bem-vindo!</h1>
+				</main>
+			</div>
 		</div>
 	);
 }

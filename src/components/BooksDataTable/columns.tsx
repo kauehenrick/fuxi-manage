@@ -41,12 +41,12 @@ export const columns: ColumnDef<BookProps>[] = [
 			</p>
 		),
 		cell: ({ row }) => {
-			const authorId = row.original.author;
+			const authorId = row.original.author_id;
 			const authors = useAuthorStore.getState().authors;
 
 			const author = authors.find((a) => a.id === authorId);
 
-			return <span>{author?.name ?? "-"}</span>;
+			return <span>{author?.name ?? ""}</span>;
 		},
 	},
 	{
@@ -60,16 +60,16 @@ export const columns: ColumnDef<BookProps>[] = [
 			</p>
 		),
 		cell: ({ row }) => {
-			const genreId = row.original.genre;
+			const genreId = row.original.genre_id;
 			const genres = useGenreStore.getState().genres;
 
 			const genre = genres.find((g) => g.id === genreId);
 
-			return <span>{genre?.name ?? "-"}</span>;
+			return <span>{genre?.name ?? ""}</span>;
 		},
 	},
 	{
-		accessorKey: "publisherYear",
+		accessorKey: "published_year",
 		header: ({ column }) => (
 			<p
 				className="cursor-pointer"

@@ -14,7 +14,7 @@ import {
 	AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useSidebarStore } from "@/stores/SidebarStore";
-import logo from "../../assets/logo.webp";
+import logoAcarosImg from "../../assets/logo.webp";
 import MenuOption from "../ui/menu-option";
 
 export default function Sidebar() {
@@ -51,8 +51,8 @@ export default function Sidebar() {
 			<div className="flex flex-col gap-7">
 				<img
 					className="self-center w-4/6 mt-5 brightness-0"
-					src={logo}
-					alt="Logo da Revenda"
+					src={logoAcarosImg}
+					alt="Logo da Acaros"
 				/>
 
 				<section>

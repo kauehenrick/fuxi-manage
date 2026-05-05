@@ -1,37 +1,20 @@
 import { toast } from "sonner";
-import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
-
-export const data = [
-	{
-		id: "d8d1fba8-9e65-4ff6-aeab-7e7763eb94cd",
-		isActive: true,
-		title: "O pequeno príncipe",
-		author: "3fcf16f2-9400-47bd-9be6-472756104ae6",
-		publisherYear: 1943,
-		location: "84-31 S142p",
-		isbn: "9780156013987",
-		genre: "9323e8f8-8001-42e5-8853-05ba6b0b9667",
-	},
-];
+import { api } from "../services/api";
 
 export const bookFormSchema = z.object({
-	id: z.string().optional(),
-	isActive: z.boolean().optional(),
-	title: z.string().min(2, { message: "O título deve ser informado." }),
-	author: z.string().min(2, { message: "O autor deve ser informado." }),
-	publisherYear: z.coerce
+	id: z.number().optional(),
+	deleted_at: z.date().optional(),
+	title: z.string().min(1, { message: "O título deve ser informado." }),
+	author_id: z.number().min(1, { message: "O autor deve ser informado." }),
+	genre_id: z.number().min(1, { message: "O gênero deve ser informado." }),
+	published_year: z.coerce
 		.number()
-		.int()
-		.min(1000, { message: "Ano de publicação inválido." })
-		.max(new Date().getFullYear(), {
-			message: "O ano de publicação não pode ser no futuro.",
-		}),
-	location: z.string().optional(),
-	isbn: z.string().max(13, { message: "ISBN inválido." }).optional(),
-	genre: z.string().min(2, { message: "O gênero deve ser informado." }),
+		.min(0, { message: "Ano de publicação inválido." })
+		.nullable(),
+	localization: z.string().nullable(),
+	isbn: z.string().max(13, { message: "ISBN inválido." }).nullable(),
 });
 
 export type BookProps = z.infer<typeof bookFormSchema>;
@@ -39,78 +22,77 @@ export type BookProps = z.infer<typeof bookFormSchema>;
 type BookStoreProps = {
 	books: BookProps[];
 	error: null | string | unknown;
-	getBooks: () => void;
-	addBook: (book: Omit<BookProps, "id" | "isActive">) => void;
-	disableBook: (book: BookProps) => void;
-	updateBook: (book: Partial<BookProps> & { id: string }) => void;
+	getBooks: () => Promise<void>;
+	addBook: (book: Omit<BookProps, "id" | "deleted_at">) => Promise<void>;
+	disableBook: (book: BookProps) => Promise<void>;
+	updateBook: (book: Partial<BookProps> & { id: number }) => Promise<void>;
 };
 
-export const useBookStore = create<BookStoreProps>()(
-	persist(
-		(set) => ({
-			books: [],
-			error: null,
+export const useBookStore = create<BookStoreProps>((set) => ({
+	books: [],
+	error: null,
 
-			getBooks: async () => {
-				try {
-					set({ books: data, error: null });
-				} catch (err) {
-					console.error(err);
-					toast.error("Erro inesperado ao buscar livros!");
-					set({ error: err });
-				}
-			},
+	getBooks: async () => {
+		try {
+			set({ error: null });
 
-			addBook: (book) => {
-				try {
-					set((state) => ({
-						books: [
-							...state.books,
-							{
-								...book,
-								id: uuidv4(),
-								isActive: true,
-							},
-						],
-					}));
+			const { data } = await api.get("/books");
 
-					toast.success("Livro cadastrado com sucesso!");
-				} catch (err) {
-					console.error(err);
-					toast.error("Erro ao cadastrar o livro.");
-				}
-			},
+			const books = data?.data ?? data ?? [];
 
-			disableBook: (book) => {
-				try {
-					set((state) => ({
-						books: state.books.map((b) =>
-							b.id === book.id ? { ...b, isActive: false } : b,
-						),
-					}));
+			set({ books });
+		} catch (err) {
+			console.error(err);
+			toast.error("Erro inesperado ao buscar livros!");
+			set({ error: err });
+		}
+	},
 
-					toast.success("Livro desativado com sucesso!");
-				} catch (err) {
-					console.error(err);
-					toast.error("Erro ao desativar o livro.");
-				}
-			},
+	addBook: async (book) => {
+		try {
+			const { data } = await api.post("/books", book);
 
-			updateBook: (book) => {
-				try {
-					set((state) => ({
-						books: state.books.map((b) =>
-							b.id === book.id ? { ...b, ...book } : b,
-						),
-					}));
+			set((state) => ({
+				books: [...state.books, data],
+			}));
 
-					toast.success("Livro atualizado com sucesso!");
-				} catch (err) {
-					console.error(err);
-					toast.error("Erro ao atualizar o livro.");
-				}
-			},
-		}),
-		{ name: "book-storage" },
-	),
-);
+			toast.success("Livro cadastrado com sucesso!");
+		} catch (err) {
+			console.error(err);
+			toast.error("Erro ao cadastrar o livro.");
+			set({ error: err });
+		}
+	},
+
+	disableBook: async (book) => {
+		try {
+			await api.delete(`/books/${book.id}`);
+
+			set((state) => ({
+				books: state.books.filter((b) => b.id !== book.id),
+			}));
+
+			toast.success("Livro desativado com sucesso!");
+		} catch (err) {
+			console.error(err);
+			toast.error("Erro ao desativar o livro.");
+			set({ error: err });
+		}
+	},
+
+	updateBook: async (book) => {
+		try {
+			const { data } = await api.patch(`/books/${book.id}`, book);
+
+			set((state) => ({
+				books: state.books.map((b) => (b.id === book.id ? data : b)),
+			}));
+
+			toast.success("Livro atualizado com sucesso!");
+		} catch (err) {
+			console.error(err);
+			toast.error("Erro ao atualizar o livro.");
+			set({ error: err });
+		}
+	},
+}));

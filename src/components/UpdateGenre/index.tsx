@@ -27,7 +27,6 @@ export default function UpdateGenre(genre: GenreProps) {
 		resolver: zodResolver(genreFormSchema),
 		defaultValues: {
 			id: genre.id,
-			isActive: genre.isActive,
 			name: genre.name,
 		},
 	});
@@ -52,7 +51,12 @@ export default function UpdateGenre(genre: GenreProps) {
 					<DialogTitle>Atualizar Gênero</DialogTitle>
 					<DialogDescription></DialogDescription>
 				</DialogHeader>
-				<form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+				<form
+					className="space-y-6"
+					onSubmit={form.handleSubmit(onSubmit, (errors) => {
+						console.error("ERROS:", errors);
+					})}
+				>
 					<section className="flex items-start gap-3 bg-white-300 border rounded-md px-3 py-2">
 						<Controller
 							name="name"

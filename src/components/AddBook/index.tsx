@@ -33,11 +33,11 @@ export default function AddBook() {
 		resolver: zodResolver(bookFormSchema),
 		defaultValues: {
 			title: "",
-			author: "",
-			genre: "",
-			publisherYear: new Date().getFullYear(),
-			location: "",
-			isbn: "",
+			author_id: 0,
+			genre_id: 0,
+			published_year: null,
+			localization: null,
+			isbn: null,
 		},
 	});
 
@@ -45,6 +45,10 @@ export default function AddBook() {
 		addBook(values);
 		setOpen(false);
 	}
+
+	const hasOtherInfosErrors = Object.keys(form.formState.errors).some((key) =>
+		["published_year"].includes(key),
+	);
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -62,7 +66,12 @@ export default function AddBook() {
 					<DialogTitle>Cadastrar Livro</DialogTitle>
 					<DialogDescription></DialogDescription>
 				</DialogHeader>
-				<form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+				<form
+					className="space-y-6"
+					onSubmit={form.handleSubmit(onSubmit, (errors) => {
+						console.error("ERROS:", errors);
+					})}
+				>
 					<section className="flex items-start gap-3 bg-white-300 border rounded-md px-3 py-2">
 						<Controller
 							name="title"
@@ -85,7 +94,7 @@ export default function AddBook() {
 						/>
 
 						<Controller
-							name="author"
+							name="author_id"
 							control={form.control}
 							render={({ field, fieldState }) => (
 								<Field data-invalid={fieldState.invalid}>
@@ -101,7 +110,7 @@ export default function AddBook() {
 						/>
 
 						<Controller
-							name="genre"
+							name="genre_id"
 							control={form.control}
 							render={({ field, fieldState }) => (
 								<Field data-invalid={fieldState.invalid}>
@@ -120,7 +129,7 @@ export default function AddBook() {
 					<Accordion
 						type="single"
 						collapsible
-						className="bg-white-300 border rounded-md px-3 py-2"
+						className={`bg-white-300 border rounded-md px-3 py-2 ${hasOtherInfosErrors ? "border-destructive border" : ""}`}
 					>
 						<AccordionItem value="item-1">
 							<AccordionTrigger className="font-medium text-md">
@@ -129,19 +138,20 @@ export default function AddBook() {
 							<AccordionContent className="mt-3">
 								<div className="flex gap-3">
 									<Controller
-										name="publisherYear"
+										name="published_year"
 										control={form.control}
 										render={({ field, fieldState }) => (
 											<Field data-invalid={fieldState.invalid}>
-												<FieldLabel htmlFor="year">Ano</FieldLabel>
+												<FieldLabel htmlFor="published_year">Ano</FieldLabel>
 												<Input
 													{...field}
-													id="year"
-													type="number"
+													id="published_year"
+													type="text"
 													value={field.value ?? ""}
 													aria-invalid={fieldState.invalid}
-													placeholder="Login button not working on mobile"
-													autoComplete=""
+													placeholder="Informe o ano de publicação"
+													autoComplete="off"
+													maxLength={4}
 												/>
 												{fieldState.invalid && (
 													<FieldError errors={[fieldState.error]} />
@@ -151,17 +161,20 @@ export default function AddBook() {
 									/>
 
 									<Controller
-										name="location"
+										name="localization"
 										control={form.control}
 										render={({ field, fieldState }) => (
 											<Field data-invalid={fieldState.invalid}>
-												<FieldLabel htmlFor="location">Localização</FieldLabel>
+												<FieldLabel htmlFor="localization">
+													Localização
+												</FieldLabel>
 												<Input
 													{...field}
-													id="location"
+													id="localization"
+													value={field.value ?? ""}
 													aria-invalid={fieldState.invalid}
 													placeholder="Informe a localização do livro"
-													autoComplete=""
+													autoComplete="off"
 												/>
 												{fieldState.invalid && (
 													<FieldError errors={[fieldState.error]} />
@@ -179,9 +192,10 @@ export default function AddBook() {
 												<Input
 													{...field}
 													id="isbn"
+													value={field.value ?? ""}
 													aria-invalid={fieldState.invalid}
 													placeholder="Informe o ISBN do livro"
-													autoComplete=""
+													autoComplete="off"
 												/>
 												{fieldState.invalid && (
 													<FieldError errors={[fieldState.error]} />

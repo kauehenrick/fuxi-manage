@@ -8,6 +8,7 @@ import AuthorPage from "./pages/AuthorPage";
 import BookPage from "./pages/BookPage";
 import GenrePage from "./pages/GenrePage";
 import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
 import PeoplePage from "./pages/PeoplePage";
 import SettingsPage from "./pages/SettingsPage";
 
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
 	{
 		path: "/settings",
 		Component: SettingsPage,
+	},
+	{
+		path: "/login",
+		Component: LoginPage,
 	},
 ]);
 

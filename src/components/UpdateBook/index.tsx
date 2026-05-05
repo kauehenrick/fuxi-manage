@@ -38,12 +38,11 @@ export default function UpdateBook(book: BookProps) {
 		resolver: zodResolver(bookFormSchema),
 		defaultValues: {
 			id: book.id,
-			isActive: book.isActive,
 			title: book.title,
-			author: book.author,
-			genre: book.genre,
-			publisherYear: book.publisherYear,
-			location: book.location,
+			author_id: book.author_id,
+			genre_id: book.genre_id,
+			published_year: book.published_year,
+			localization: book.localization,
 			isbn: book.isbn,
 		},
 	});
@@ -68,7 +67,12 @@ export default function UpdateBook(book: BookProps) {
 					<DialogTitle>Editar Livro</DialogTitle>
 					<DialogDescription></DialogDescription>
 				</DialogHeader>
-				<form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+				<form
+					className="space-y-6"
+					onSubmit={form.handleSubmit(onSubmit, (errors) => {
+						console.error("ERROS:", errors);
+					})}
+				>
 					<section className="flex items-start gap-3 bg-white-300 border rounded-md px-3 py-2">
 						<Controller
 							name="title"
@@ -91,7 +95,7 @@ export default function UpdateBook(book: BookProps) {
 						/>
 
 						<Controller
-							name="author"
+							name="author_id"
 							control={form.control}
 							render={({ field, fieldState }) => (
 								<Field data-invalid={fieldState.invalid}>
@@ -107,7 +111,7 @@ export default function UpdateBook(book: BookProps) {
 						/>
 
 						<Controller
-							name="genre"
+							name="genre_id"
 							control={form.control}
 							render={({ field, fieldState }) => (
 								<Field data-invalid={fieldState.invalid}>
@@ -135,7 +139,7 @@ export default function UpdateBook(book: BookProps) {
 							<AccordionContent className="mt-3">
 								<div className="flex gap-3">
 									<Controller
-										name="publisherYear"
+										name="published_year"
 										control={form.control}
 										render={({ field, fieldState }) => (
 											<Field data-invalid={fieldState.invalid}>
@@ -143,11 +147,11 @@ export default function UpdateBook(book: BookProps) {
 												<Input
 													{...field}
 													id="year"
-													type="number"
+													type="text"
 													value={field.value ?? ""}
 													aria-invalid={fieldState.invalid}
-													placeholder="Login button not working on mobile"
-													autoComplete=""
+													placeholder="Informe o ano de publicação"
+													autoComplete="off"
 												/>
 												{fieldState.invalid && (
 													<FieldError errors={[fieldState.error]} />
@@ -157,17 +161,20 @@ export default function UpdateBook(book: BookProps) {
 									/>
 
 									<Controller
-										name="location"
+										name="localization"
 										control={form.control}
 										render={({ field, fieldState }) => (
 											<Field data-invalid={fieldState.invalid}>
-												<FieldLabel htmlFor="location">Localização</FieldLabel>
+												<FieldLabel htmlFor="localization">
+													Localização
+												</FieldLabel>
 												<Input
 													{...field}
-													id="location"
+													id="localization"
+													value={field.value ?? ""}
 													aria-invalid={fieldState.invalid}
 													placeholder="Informe a localização do livro"
-													autoComplete=""
+													autoComplete="off"
 												/>
 												{fieldState.invalid && (
 													<FieldError errors={[fieldState.error]} />
@@ -185,9 +192,10 @@ export default function UpdateBook(book: BookProps) {
 												<Input
 													{...field}
 													id="isbn"
+													value={field.value ?? ""}
 													aria-invalid={fieldState.invalid}
 													placeholder="Informe o ISBN do livro"
-													autoComplete=""
+													autoComplete="off"
 												/>
 												{fieldState.invalid && (
 													<FieldError errors={[fieldState.error]} />

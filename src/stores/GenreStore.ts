@@ -1,30 +1,11 @@
 import { toast } from "sonner";
-import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
-
-export const genresData: GenreProps[] = [
-	{
-		id: "83f59499-c6ff-400b-ad9e-f52708950fd7",
-		isActive: true,
-		name: "Literatura infantojuvenil",
-	},
-	{
-		id: "9323e8f8-8001-42e5-8853-05ba6b0b9667",
-		isActive: true,
-		name: "Literatura clássica",
-	},
-	{
-		id: "adf02c26-a4af-43a5-bac4-727f55f640f0",
-		isActive: true,
-		name: "Literatura brasileira",
-	},
-];
+import { api } from "../services/api";
 
 export const genreFormSchema = z.object({
-	id: z.string().optional(),
-	isActive: z.boolean().optional(),
+	id: z.number().optional(),
+	deleted_at: z.date().optional(),
 	name: z.string().min(2, { message: "O nome do gênero deve ser informado." }),
 });
 
@@ -33,77 +14,77 @@ export type GenreProps = z.infer<typeof genreFormSchema>;
 type GenreStoreProps = {
 	genres: GenreProps[];
 	error: null | string | unknown;
-	getGenres: () => void;
-	addGenre: (genre: Omit<GenreProps, "id" | "isActive">) => void;
-	disableGenre: (genre: GenreProps) => void;
-	updateGenre: (genre: GenreProps) => void;
+	getGenres: () => Promise<void>;
+	addGenre: (genre: Omit<GenreProps, "id" | "isActive">) => Promise<void>;
+	disableGenre: (genre: GenreProps) => Promise<void>;
+	updateGenre: (genre: GenreProps) => Promise<void>;
 };
 
-export const useGenreStore = create<GenreStoreProps>()(
-	persist(
-		(set) => ({
-			genres: [],
-			error: null,
+export const useGenreStore = create<GenreStoreProps>((set) => ({
+	genres: [],
+	error: null,
 
-			getGenres: async () => {
-				try {
-					set({ genres: genresData, error: null });
-				} catch (err) {
-					toast("Erro inesperado ao buscar gêneros!");
-					set({ error: err });
-				}
-			},
+	getGenres: async () => {
+		try {
+			set({ error: null });
 
-			addGenre: (genre) => {
-				try {
-					set((state) => ({
-						genres: [
-							...state.genres,
-							{
-								id: uuidv4(),
-								isActive: true,
-								...genre,
-							},
-						],
-					}));
-					toast.success("Gênero adicionado com sucesso!");
-				} catch (err) {
-					console.error(err);
-					toast.error("Erro inesperado ao adicionar gênero!");
-					set({ error: err });
-				}
-			},
+			const { data } = await api.get("/genres");
 
-			disableGenre: (genre) => {
-				try {
-					set((state) => ({
-						genres: state.genres.map((g) =>
-							g.id === genre.id ? { ...g, isActive: false } : g,
-						),
-					}));
-					toast.success("Gênero desativado com sucesso!");
-				} catch (err) {
-					console.error(err);
-					toast.error("Erro inesperado ao desativar gênero!");
-					set({ error: err });
-				}
-			},
+			const genres = data?.data ?? data ?? [];
 
-			updateGenre: (genre) => {
-				try {
-					set((state) => ({
-						genres: state.genres.map((g) => (g.id === genre.id ? genre : g)),
-					}));
-					toast.success("Gênero atualizado com sucesso!");
-				} catch (err) {
-					console.error(err);
-					toast.error("Erro inesperado ao atualizar gênero!");
-					set({ error: err });
-				}
-			},
-		}),
-		{
-			name: "genre-storage",
-		},
-	),
-);
+			set({ genres });
+		} catch (err) {
+			console.error(err);
+			toast.error("Erro inesperado ao buscar gêneros!");
+			set({ error: err });
+		}
+	},
+
+	addGenre: async (genre) => {
+		try {
+			const { data } = await api.post("/genres", genre);
+
+			set((state) => ({
+				genres: [...state.genres, data],
+			}));
+
+			toast.success("Gênero adicionado com sucesso!");
+		} catch (err) {
+			console.error(err);
+			toast.error("Erro inesperado ao adicionar gênero!");
+			set({ error: err });
+		}
+	},
+
+	disableGenre: async (genre) => {
+		try {
+			await api.delete(`/genres/${genre.id}`);
+
+			set((state) => ({
+				genres: state.genres.filter((g) => g.id !== genre.id),
+			}));
+
+			toast.success("Gênero desativado com sucesso!");
+		} catch (err) {
+			console.error(err);
+			toast.error("Erro inesperado ao desativar gênero!");
+			set({ error: err });
+		}
+	},
+
+	updateGenre: async (genre) => {
+		try {
+			const { data } = await api.patch(`/genres/${genre.id}`, genre);
+
+			set((state) => ({
+				genres: state.genres.map((g) => (g.id === genre.id ? data : g)),
+			}));
+
+			toast.success("Gênero atualizado com sucesso!");
+		} catch (err) {
+			console.error(err);
+			toast.error("Erro inesperado ao atualizar gênero!");
+			set({ error: err });
+		}
+	},
+}));
