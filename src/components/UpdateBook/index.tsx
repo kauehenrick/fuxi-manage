@@ -22,7 +22,7 @@ import {
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import {
 	type BookProps,
-	bookFormSchema,
+	bookUpdateFormSchema,
 	useBookStore,
 } from "@/stores/BookStore";
 import AuthorSelect from "../ui/author-select";
@@ -34,8 +34,8 @@ export default function UpdateBook(book: BookProps) {
 	const [open, setOpen] = useState(false);
 	const { updateBook } = useBookStore();
 
-	const form = useForm<z.infer<typeof bookFormSchema>>({
-		resolver: zodResolver(bookFormSchema),
+	const form = useForm<z.infer<typeof bookUpdateFormSchema>>({
+		resolver: zodResolver(bookUpdateFormSchema),
 		defaultValues: {
 			id: book.id,
 			title: book.title,
@@ -47,7 +47,7 @@ export default function UpdateBook(book: BookProps) {
 		},
 	});
 
-	function onSubmit(values: z.infer<typeof bookFormSchema>) {
+	function onSubmit(values: z.infer<typeof bookUpdateFormSchema>) {
 		updateBook(values);
 		setOpen(false);
 	}

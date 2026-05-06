@@ -9,12 +9,21 @@ export const bookFormSchema = z.object({
 	title: z.string().min(1, { message: "O título deve ser informado." }),
 	author_id: z.number().min(1, { message: "O autor deve ser informado." }),
 	genre_id: z.number().min(1, { message: "O gênero deve ser informado." }),
-	published_year: z.coerce
-		.number()
-		.min(0, { message: "Ano de publicação inválido." })
-		.nullable(),
+	published_year: z.union([
+		z
+			.number()
+			.min(0, { message: "Ano de publicação inválido." })
+			.max(new Date().getFullYear(), {
+				message: "Ano não pode ser no futuro.",
+			}),
+		z.null(),
+	]),
 	localization: z.string().nullable(),
 	isbn: z.string().max(13, { message: "ISBN inválido." }).nullable(),
+});
+
+export const bookUpdateFormSchema = bookFormSchema.extend({
+	id: z.number({ message: "ID do livro é obrigatório." }),
 });
 
 export type BookProps = z.infer<typeof bookFormSchema>;
