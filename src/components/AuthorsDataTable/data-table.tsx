@@ -68,8 +68,8 @@ export function DataTable<TData, TValue>({
 	});
 
 	return (
-		<div className="bg-white-800 border rounded-md">
-			<section className="flex justify-between items-center py-2 px-6">
+		<div className="rounded-md border bg-white-800">
+			<section className="flex items-center justify-between px-6 py-2">
 				<p className="font-medium">Lista de Autores</p>
 			</section>
 

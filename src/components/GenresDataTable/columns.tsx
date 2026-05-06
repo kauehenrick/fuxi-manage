@@ -8,31 +8,33 @@ export const columns: ColumnDef<GenreProps>[] = [
 		id: "index",
 		sortingFn: (rowA, rowB) => rowA.index - rowB.index,
 		header: ({ column }) => (
-			<p
+			<button
+				type="button"
 				className="cursor-pointer"
 				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 			>
 				#
-			</p>
+			</button>
 		),
 		cell: ({ row }) => <span>{row.index + 1}</span>,
 	},
 	{
 		accessorKey: "name",
 		header: ({ column }) => (
-			<p
+			<button
+				type="button"
 				className="cursor-pointer"
 				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 			>
 				Gênero
-			</p>
+			</button>
 		),
 	},
 	{
 		accessorKey: "actions",
-		header: "Ações",
+		header: () => <p className="me-5 text-right">Ações</p>,
 		cell: (cell) => (
-			<div className="flex space-x-4">
+			<div className="me-5 flex justify-end space-x-4">
 				<UpdateGenre {...cell.row.original} />
 				<DisableGenre genre={cell.row.original} />
 			</div>

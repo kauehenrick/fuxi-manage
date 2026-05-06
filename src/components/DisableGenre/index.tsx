@@ -22,7 +22,7 @@ export default function DisableGenre({ genre }: { genre: GenreProps }) {
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
 				<span
-					className="hover:text-red-600 duration-300 cursor-pointer"
+					className="cursor-pointer duration-300 hover:text-red-600"
 					data-testid="dialog-trigger"
 				>
 					<PiTrashLight size="20px" />

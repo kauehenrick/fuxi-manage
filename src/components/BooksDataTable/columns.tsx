@@ -10,35 +10,38 @@ export const columns: ColumnDef<BookProps>[] = [
 		id: "index",
 		sortingFn: (rowA, rowB) => rowA.index - rowB.index,
 		header: ({ column }) => (
-			<p
+			<button
+				type="button"
 				className="cursor-pointer"
 				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 			>
 				#
-			</p>
+			</button>
 		),
 		cell: ({ row }) => <span>{row.index + 1}</span>,
 	},
 	{
 		accessorKey: "title",
 		header: ({ column }) => (
-			<p
+			<button
+				type="button"
 				className="cursor-pointer"
 				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 			>
 				Título
-			</p>
+			</button>
 		),
 	},
 	{
 		accessorKey: "author",
 		header: ({ column }) => (
-			<p
+			<button
+				type="button"
 				className="cursor-pointer"
 				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 			>
 				Autor
-			</p>
+			</button>
 		),
 		cell: ({ row }) => {
 			const authorId = row.original.author_id;
@@ -52,12 +55,13 @@ export const columns: ColumnDef<BookProps>[] = [
 	{
 		accessorKey: "genre",
 		header: ({ column }) => (
-			<p
+			<button
+				type="button"
 				className="cursor-pointer"
 				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 			>
 				Gênero
-			</p>
+			</button>
 		),
 		cell: ({ row }) => {
 			const genreId = row.original.genre_id;
@@ -71,41 +75,44 @@ export const columns: ColumnDef<BookProps>[] = [
 	{
 		accessorKey: "published_year",
 		header: ({ column }) => (
-			<p
+			<button
+				type="button"
 				className="cursor-pointer"
 				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 			>
 				Ano
-			</p>
+			</button>
 		),
 	},
 	{
 		accessorKey: "location",
 		header: ({ column }) => (
-			<p
+			<button
+				type="button"
 				className="cursor-pointer"
 				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 			>
 				Localização
-			</p>
+			</button>
 		),
 	},
 	{
 		accessorKey: "isbn",
 		header: ({ column }) => (
-			<p
+			<button
+				type="button"
 				className="cursor-pointer"
 				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 			>
 				ISBN
-			</p>
+			</button>
 		),
 	},
 	{
 		accessorKey: "actions",
-		header: "Ações",
+		header: () => <p className="me-5 text-right">Ações</p>,
 		cell: (cell) => (
-			<div className="flex space-x-4">
+			<div className="me-5 flex justify-end space-x-4">
 				<UpdateBook {...cell.row.original} />
 				<DisableBook book={cell.row.original} />
 			</div>

@@ -1,20 +1,12 @@
 import { Button } from "@/components/ui/button";
-import {
-	Card,
-	CardAction,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import logoAcarosImg from "../../assets/logo.webp";
 
 export default function LoginPage() {
 	return (
-		<div className="w-full h-screen flex items-center justify-center">
+		<div className="flex h-screen w-full items-center justify-center">
 			<Card className="w-full max-w-4xl p-10">
 				<img
 					className="w-40 brightness-0"

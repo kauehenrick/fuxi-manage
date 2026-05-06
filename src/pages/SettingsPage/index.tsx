@@ -6,7 +6,7 @@ export default function SettingsPage() {
 		<div className="flex">
 			<Sidebar />
 
-			<main className="flex flex-col w-full items-start">
+			<main className="flex w-full flex-col items-start">
 				<Header pageName="Configurações" />
 			</main>
 		</div>

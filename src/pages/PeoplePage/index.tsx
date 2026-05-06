@@ -7,7 +7,7 @@ export default function PeoplePage() {
 		<div className="flex">
 			<Sidebar />
 
-			<div className="flex flex-col w-full items-start">
+			<div className="flex w-full flex-col items-start">
 				<Header pageName="Pessoas" />
 
 				<main className="w-full px-6">

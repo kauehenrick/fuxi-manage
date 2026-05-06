@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { PiPencilLineThin } from "react-icons/pi";
-import { z } from "zod";
+import type { z } from "zod";
 import {
 	Dialog,
 	DialogClose,
@@ -40,7 +40,7 @@ export default function UpdateAuthor(author: AuthorProps) {
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
 				<span
-					className="hover:text-green-700 duration-300 cursor-pointer"
+					className="cursor-pointer duration-300 hover:text-green-700"
 					data-testid="dialog-trigger"
 				>
 					<PiPencilLineThin size="20px" />
@@ -57,7 +57,7 @@ export default function UpdateAuthor(author: AuthorProps) {
 						console.error("ERROS:", errors);
 					})}
 				>
-					<section className="flex items-start gap-3 bg-white-300 border rounded-md px-3 py-2">
+					<section className="flex items-start gap-3 rounded-md border bg-white-300 px-3 py-2">
 						<Controller
 							name="name"
 							control={form.control}

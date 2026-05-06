@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { PiPencilLineThin } from "react-icons/pi";
-import { z } from "zod";
+import type { z } from "zod";
 import {
 	Accordion,
 	AccordionContent,
@@ -56,7 +56,7 @@ export default function UpdateBook(book: BookProps) {
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
 				<span
-					className="hover:text-green-700 duration-300 cursor-pointer"
+					className="cursor-pointer duration-300 hover:text-green-700"
 					data-testid="dialog-trigger"
 				>
 					<PiPencilLineThin size="20px" />
@@ -73,7 +73,7 @@ export default function UpdateBook(book: BookProps) {
 						console.error("ERROS:", errors);
 					})}
 				>
-					<section className="flex items-start gap-3 bg-white-300 border rounded-md px-3 py-2">
+					<section className="flex items-start gap-3 rounded-md border bg-white-300 px-3 py-2">
 						<Controller
 							name="title"
 							control={form.control}
@@ -130,7 +130,7 @@ export default function UpdateBook(book: BookProps) {
 					<Accordion
 						type="single"
 						collapsible
-						className="bg-white-300 border rounded-md px-3 py-2"
+						className="rounded-md border bg-white-300 px-3 py-2"
 					>
 						<AccordionItem value="item-1">
 							<AccordionTrigger className="font-medium text-md">

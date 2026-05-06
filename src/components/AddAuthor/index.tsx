@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 import {
 	Dialog,
 	DialogClose,
@@ -50,7 +50,7 @@ export default function AddAuthor() {
 					<DialogDescription></DialogDescription>
 				</DialogHeader>
 				<form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-					<section className="flex items-start gap-3 bg-white-300 border rounded-md px-3 py-2">
+					<section className="flex items-start gap-3 rounded-md border bg-white-300 px-3 py-2">
 						<Controller
 							name="name"
 							control={form.control}

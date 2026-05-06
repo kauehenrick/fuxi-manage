@@ -47,10 +47,10 @@ export default function Sidebar() {
 	);
 
 	return (
-		<aside className="flex flex-col justify-between border-e h-dvh w-64">
+		<aside className="flex h-dvh w-64 flex-col justify-between border-e">
 			<div className="flex flex-col gap-7">
 				<img
-					className="self-center w-4/6 mt-5 brightness-0"
+					className="mt-5 w-4/6 self-center brightness-0"
 					src={logoAcarosImg}
 					alt="Logo da Acaros"
 				/>
@@ -69,7 +69,7 @@ export default function Sidebar() {
 						defaultValue={isRegisterSelected ? "item-1" : ""}
 					>
 						<AccordionItem value="item-1">
-							<AccordionTrigger className="pb-1 px-4 py-2 hover:ps-5 hover:text-green-700 duration-500 rounded-none">
+							<AccordionTrigger className="rounded-none px-4 py-2 pb-1 duration-500 hover:ps-5 hover:text-green-700">
 								<div className="flex items-center space-x-2">
 									<PiCirclesThreePlusLight size={"17px"} />
 									<p>Cadastros</p>
@@ -98,7 +98,7 @@ export default function Sidebar() {
 				</section>
 			</div>
 
-			<footer className="flex items-center ms-4 mb-4 text-xs gap-3">
+			<footer className="ms-4 mb-4 flex items-center gap-3 text-xs">
 				<PiUserCircleFill className="cursor-pointer" size={"2.5rem"} />
 				<div>
 					<p>Usuário</p>

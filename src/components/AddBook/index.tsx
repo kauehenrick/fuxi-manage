@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 import {
 	Accordion,
 	AccordionContent,
@@ -72,7 +72,7 @@ export default function AddBook() {
 						console.error("ERROS:", errors);
 					})}
 				>
-					<section className="flex items-start gap-3 bg-white-300 border rounded-md px-3 py-2">
+					<section className="flex items-start gap-3 rounded-md border bg-white-300 px-3 py-2">
 						<Controller
 							name="title"
 							control={form.control}
@@ -129,7 +129,7 @@ export default function AddBook() {
 					<Accordion
 						type="single"
 						collapsible
-						className={`bg-white-300 border rounded-md px-3 py-2 ${hasOtherInfosErrors ? "border-destructive border" : ""}`}
+						className={`rounded-md border bg-white-300 px-3 py-2 ${hasOtherInfosErrors ? "border border-destructive" : ""}`}
 					>
 						<AccordionItem value="item-1">
 							<AccordionTrigger className="font-medium text-md">
