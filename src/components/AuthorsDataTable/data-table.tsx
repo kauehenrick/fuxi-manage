@@ -28,11 +28,6 @@ interface DataTableProps<TData, TValue> {
 	data: TData[];
 }
 
-const includesString = (row: any, columnId: string, filterValue: string) => {
-	const value = row.getValue(columnId);
-	return String(value).toLowerCase().includes(filterValue.toLowerCase());
-};
-
 export function DataTable<TData, TValue>({
 	columns,
 	data,
@@ -49,7 +44,6 @@ export function DataTable<TData, TValue>({
 		columns,
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
-		globalFilterFn: includesString,
 		onSortingChange: setSorting,
 		getSortedRowModel: getSortedRowModel(),
 		onColumnFiltersChange: setColumnFilters,
@@ -136,7 +130,7 @@ export function DataTable<TData, TValue>({
 					</TableBody>
 				</Table>
 			</ScrollArea>
-
+			
 			<footer className="flex items-center justify-end space-x-2 py-4 pe-5">
 				<Button
 					variant="outline"

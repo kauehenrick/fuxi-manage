@@ -1,5 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { GenreProps } from "@/stores/GenreStore";
+import { includesString } from "../../lib/utils";
 import DisableGenre from "../DisableGenre";
 import UpdateGenre from "../UpdateGenre";
 
@@ -29,6 +30,7 @@ export const columns: ColumnDef<GenreProps>[] = [
 				Gênero
 			</button>
 		),
+		filterFn: includesString,
 	},
 	{
 		accessorKey: "actions",

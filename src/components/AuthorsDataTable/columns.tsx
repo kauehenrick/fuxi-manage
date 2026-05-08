@@ -1,5 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import type { AuthorProps } from "@/stores/AuthorStore";
+import { includesString } from "../../lib/utils";
 import DisableAuthor from "../DisableAuthor";
 import UpdateAuthor from "../UpdateAuthor";
 
@@ -29,6 +30,7 @@ export const columns: ColumnDef<AuthorProps>[] = [
 				Nome do Autor
 			</button>
 		),
+		filterFn: includesString,
 	},
 	{
 		accessorKey: "actions",

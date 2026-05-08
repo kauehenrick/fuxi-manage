@@ -2,6 +2,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { useAuthorStore } from "@/stores/AuthorStore";
 import type { BookProps } from "@/stores/BookStore";
 import { useGenreStore } from "@/stores/GenreStore";
+import { includesString } from "../../lib/utils";
 import DisableBook from "../DisableBook";
 import UpdateBook from "../UpdateBook";
 
@@ -31,6 +32,7 @@ export const columns: ColumnDef<BookProps>[] = [
 				Título
 			</button>
 		),
+		filterFn: includesString,
 	},
 	{
 		accessorKey: "author",
