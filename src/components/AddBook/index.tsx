@@ -146,7 +146,6 @@ export default function AddBook() {
 												<Input
 													{...field}
 													id="published_year"
-													type="text"
 													value={field.value ?? ""}
 													aria-invalid={fieldState.invalid}
 													placeholder="Informe o ano de publicação"

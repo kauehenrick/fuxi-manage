@@ -2,17 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import logoAcarosImg from "../../assets/logo.webp";
+import logoFuXiImg from "../../assets/fuxi-logo.svg";
 
 export default function LoginPage() {
 	return (
 		<div className="flex h-screen w-full items-center justify-center">
 			<Card className="w-full max-w-4xl p-10">
-				<img
-					className="w-40 brightness-0"
-					src={logoAcarosImg}
-					alt="Logo da Acaros"
-				/>
+				<img className="w-40" src={logoFuXiImg} alt="Logo do FuXi" />
 
 				<CardContent className="flex justify-between px-0">
 					<div>
@@ -28,7 +24,7 @@ export default function LoginPage() {
 									<Input
 										id="email"
 										type="email"
-										placeholder="m@example.com"
+										placeholder="fuxi@example.com"
 										required
 										className="min-w-90"
 									/>
