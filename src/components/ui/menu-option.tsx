@@ -19,8 +19,8 @@ export default function MenuOption(props: MenuOptionProps) {
 	const defineClassNames = () =>
 		[
 			"flex text-center space-x-2 px-4 py-2 text-sm cursor-pointer duration-500",
-			"hover:ps-5 hover:text-green-700",
-			isSelected ? "ps-5 text-green-700" : "",
+			"hover:ps-5 hover:text-green-primary",
+			isSelected ? "ps-5 text-green-primary" : "",
 			props.extraClassName,
 			isSelected && props.extraClassName ? "ps-9" : "",
 		].join(" ");

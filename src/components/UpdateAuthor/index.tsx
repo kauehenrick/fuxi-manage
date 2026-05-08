@@ -40,7 +40,7 @@ export default function UpdateAuthor(author: AuthorProps) {
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
 				<span
-					className="cursor-pointer duration-300 hover:text-green-700"
+					className="cursor-pointer duration-300 hover:text-green-primary"
 					data-testid="dialog-trigger"
 				>
 					<PiPencilLineThin size="20px" />

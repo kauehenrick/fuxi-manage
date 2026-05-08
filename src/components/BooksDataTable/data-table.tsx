@@ -10,7 +10,9 @@ import {
 	useReactTable,
 } from "@tanstack/react-table";
 import * as React from "react";
+import { PiMagnifyingGlassLight } from "react-icons/pi";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
 	Table,
@@ -71,8 +73,18 @@ export function DataTable<TData, TValue>({
 		<div className="rounded-md border bg-white-800">
 			<section className="flex items-center justify-between px-6 py-2">
 				<p className="font-medium">Lista de Livros</p>
-			</section>
 
+				<Input
+					type="text"
+					placeholder="Pesquisar livros..."
+					startIcon={<PiMagnifyingGlassLight />}
+					value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+					onChange={(event) =>
+						table.getColumn("title")?.setFilterValue(event.target.value)
+					}
+					className="h-7.5 min-w-70"
+				/>
+			</section>
 			<ScrollArea className="h-87.5 2xl:h-112.5">
 				<Table>
 					<TableHeader className="bg-white-300">

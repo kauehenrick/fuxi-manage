@@ -69,7 +69,7 @@ export default function Sidebar() {
 						defaultValue={isRegisterSelected ? "item-1" : ""}
 					>
 						<AccordionItem value="item-1">
-							<AccordionTrigger className="rounded-none px-4 py-2 pb-1 duration-500 hover:ps-5 hover:text-green-700">
+							<AccordionTrigger className="rounded-none px-4 py-2 pb-1 duration-500 hover:ps-5 hover:text-green-primary">
 								<div className="flex items-center space-x-2">
 									<PiCirclesThreePlusLight size={"17px"} />
 									<p>Cadastros</p>
