@@ -87,7 +87,7 @@ export const columns: ColumnDef<BookProps>[] = [
 		),
 	},
 	{
-		accessorKey: "location",
+		accessorKey: "localization",
 		header: ({ column }) => (
 			<button
 				type="button"

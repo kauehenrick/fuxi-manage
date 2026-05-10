@@ -47,9 +47,15 @@ export default function UpdateBook(book: BookProps) {
 		},
 	});
 
-	function onSubmit(values: z.infer<typeof bookUpdateFormSchema>) {
-		updateBook(values);
-		setOpen(false);
+	async function onSubmit(values: z.infer<typeof bookUpdateFormSchema>) {
+		try {
+			await updateBook(values);
+
+			setOpen(false);
+			form.reset();
+		} catch (error) {
+			console.error(error);
+		}
 	}
 
 	return (
@@ -146,12 +152,19 @@ export default function UpdateBook(book: BookProps) {
 												<FieldLabel htmlFor="year">Ano</FieldLabel>
 												<Input
 													{...field}
-													id="year"
-													type="text"
+													id="published_year"
 													value={field.value ?? ""}
 													aria-invalid={fieldState.invalid}
 													placeholder="Informe o ano de publicação"
 													autoComplete="off"
+													inputMode="numeric"
+													onChange={(e) => {
+														const value = e.target.value
+															.replace(/\D/g, "")
+															.slice(0, 4);
+
+														field.onChange(value);
+													}}
 												/>
 												{fieldState.invalid && (
 													<FieldError errors={[fieldState.error]} />
@@ -210,7 +223,11 @@ export default function UpdateBook(book: BookProps) {
 
 					<DialogFooter>
 						<DialogClose asChild>
-							<Button variant="ghost" type="button">
+							<Button
+								variant="ghost"
+								type="button"
+								onClick={() => form.reset()}
+							>
 								Cancelar
 							</Button>
 						</DialogClose>

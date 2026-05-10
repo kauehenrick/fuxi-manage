@@ -31,9 +31,15 @@ export default function UpdateAuthor(author: AuthorProps) {
 		},
 	});
 
-	function onSubmit(values: z.infer<typeof authorFormSchema>) {
-		updateAuthor(values);
-		setOpen(false);
+	async function onSubmit(values: z.infer<typeof authorFormSchema>) {
+		try {
+			await updateAuthor(values);
+
+			setOpen(false);
+			form.reset();
+		} catch (error) {
+			console.error(error);
+		}
 	}
 
 	return (
@@ -81,7 +87,11 @@ export default function UpdateAuthor(author: AuthorProps) {
 
 					<DialogFooter>
 						<DialogClose asChild>
-							<Button variant="ghost" type="button">
+							<Button
+								variant="ghost"
+								type="button"
+								onClick={() => form.reset()}
+							>
 								Cancelar
 							</Button>
 						</DialogClose>

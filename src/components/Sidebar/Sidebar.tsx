@@ -50,7 +50,7 @@ export default function Sidebar() {
 		<aside className="flex h-dvh w-64 flex-col justify-between border-e">
 			<div className="flex flex-col gap-7">
 				<img
-					className="mt-5 w-4/6 self-center"
+					className="mt-5 w-4/8 self-center"
 					src={logoFuXiImg}
 					alt="Logo do FuXi"
 				/>

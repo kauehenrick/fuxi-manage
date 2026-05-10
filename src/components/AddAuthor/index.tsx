@@ -28,9 +28,15 @@ export default function AddAuthor() {
 		},
 	});
 
-	function onSubmit(values: z.infer<typeof authorFormSchema>) {
-		addAuthor(values);
-		setOpen(false);
+	async function onSubmit(values: z.infer<typeof authorFormSchema>) {
+		try {
+			await addAuthor(values);
+
+			setOpen(false);
+			form.reset();
+		} catch (error) {
+			console.error(error);
+		}
 	}
 
 	return (
@@ -74,7 +80,11 @@ export default function AddAuthor() {
 
 					<DialogFooter>
 						<DialogClose asChild>
-							<Button variant="ghost" type="button">
+							<Button
+								variant="ghost"
+								type="button"
+								onClick={() => form.reset()}
+							>
 								Cancelar
 							</Button>
 						</DialogClose>

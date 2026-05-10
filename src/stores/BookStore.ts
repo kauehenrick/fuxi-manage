@@ -1,3 +1,4 @@
+import type { AxiosError } from "axios";
 import { toast } from "sonner";
 import { z } from "zod";
 import { create } from "zustand";
@@ -11,11 +12,30 @@ export const bookFormSchema = z.object({
 	genre_id: z.number().min(1, { message: "O gênero deve ser informado." }),
 	published_year: z
 		.string()
-		.min(0, { message: "Ano de publicação inválido." })
-		.max(new Date().getFullYear(), {
-			message: "Ano não pode ser no futuro.",
-		})
-		.nullable(),
+		.nullable()
+		.refine(
+			(value) => {
+				if (!value) return true;
+
+				const year = Number(value);
+				const currentYear = new Date().getFullYear();
+
+				return year <= currentYear;
+			},
+			{
+				message: "O ano de publicação não pode ser maior que o ano atual.",
+			},
+		)
+		.refine(
+			(value) => {
+				if (!value) return true;
+
+				return /^\d{4}$/.test(value);
+			},
+			{
+				message: "Insira um ano de publicação válido.",
+			},
+		),
 	localization: z.string().nullable(),
 	isbn: z.string().max(13, { message: "ISBN inválido." }).nullable(),
 });
@@ -49,7 +69,6 @@ export const useBookStore = create<BookStoreProps>((set) => ({
 
 			set({ books });
 		} catch (err) {
-			console.error(err);
 			toast.error("Erro inesperado ao buscar livros!");
 			set({ error: err });
 		}
@@ -65,9 +84,18 @@ export const useBookStore = create<BookStoreProps>((set) => ({
 
 			toast.success("Livro cadastrado com sucesso!");
 		} catch (err) {
-			console.error(err);
-			toast.error("Erro ao cadastrar o livro.");
+			const error = err as AxiosError<{
+				message?: string;
+				errors?: Record<string, string[]>;
+			}>;
+
+			const message =
+				error?.response?.data?.message || "Erro ao cadastrar o livro.";
+
+			toast.error(message);
+
 			set({ error: err });
+			throw err;
 		}
 	},
 
@@ -81,9 +109,9 @@ export const useBookStore = create<BookStoreProps>((set) => ({
 
 			toast.success("Livro desativado com sucesso!");
 		} catch (err) {
-			console.error(err);
 			toast.error("Erro ao desativar o livro.");
 			set({ error: err });
+			throw err;
 		}
 	},
 
@@ -97,9 +125,18 @@ export const useBookStore = create<BookStoreProps>((set) => ({
 
 			toast.success("Livro atualizado com sucesso!");
 		} catch (err) {
-			console.error(err);
-			toast.error("Erro ao atualizar o livro.");
+			const error = err as AxiosError<{
+				message?: string;
+				errors?: Record<string, string[]>;
+			}>;
+
+			const message =
+				error?.response?.data?.message || "Erro ao atualizar o livro.";
+
+			toast.error(message);
+
 			set({ error: err });
+			throw err;
 		}
 	},
 }));

@@ -41,9 +41,15 @@ export default function AddBook() {
 		},
 	});
 
-	function onSubmit(values: z.infer<typeof bookFormSchema>) {
-		addBook(values);
-		setOpen(false);
+	async function onSubmit(values: z.infer<typeof bookFormSchema>) {
+		try {
+			await addBook(values);
+
+			setOpen(false);
+			form.reset();
+		} catch (error) {
+			console.error(error);
+		}
 	}
 
 	const hasOtherInfosErrors = Object.keys(form.formState.errors).some((key) =>
@@ -150,7 +156,14 @@ export default function AddBook() {
 													aria-invalid={fieldState.invalid}
 													placeholder="Informe o ano de publicação"
 													autoComplete="off"
-													maxLength={4}
+													inputMode="numeric"
+													onChange={(e) => {
+														const value = e.target.value
+															.replace(/\D/g, "")
+															.slice(0, 4);
+
+														field.onChange(value);
+													}}
 												/>
 												{fieldState.invalid && (
 													<FieldError errors={[fieldState.error]} />
@@ -209,7 +222,11 @@ export default function AddBook() {
 
 					<DialogFooter>
 						<DialogClose asChild>
-							<Button variant="ghost" type="button">
+							<Button
+								variant="ghost"
+								type="button"
+								onClick={() => form.reset()}
+							>
 								Cancelar
 							</Button>
 						</DialogClose>

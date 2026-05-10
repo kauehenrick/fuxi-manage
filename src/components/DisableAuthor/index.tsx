@@ -44,9 +44,14 @@ export default function DisableAuthor({ author }: { author: AuthorProps }) {
 					</DialogClose>
 
 					<Button
-						onClick={() => {
-							disableAuthor(author);
-							setOpen(false);
+						onClick={async () => {
+							try {
+								await disableAuthor(author);
+
+								setOpen(false);
+							} catch (error) {
+								console.error(error);
+							}
 						}}
 					>
 						Sim

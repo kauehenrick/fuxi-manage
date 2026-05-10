@@ -28,9 +28,15 @@ export default function AddGenre() {
 		},
 	});
 
-	function onSubmit(values: z.infer<typeof genreFormSchema>) {
-		addGenre(values);
-		setOpen(false);
+	async function onSubmit(values: z.infer<typeof genreFormSchema>) {
+		try {
+			await addGenre(values);
+
+			setOpen(false);
+			form.reset();
+		} catch (error) {
+			console.error(error);
+		}
 	}
 
 	return (
@@ -74,7 +80,11 @@ export default function AddGenre() {
 
 					<DialogFooter>
 						<DialogClose asChild>
-							<Button variant="ghost" type="button">
+							<Button
+								variant="ghost"
+								type="button"
+								onClick={() => form.reset()}
+							>
 								Cancelar
 							</Button>
 						</DialogClose>

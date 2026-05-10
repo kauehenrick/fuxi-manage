@@ -44,9 +44,14 @@ export default function DisableGenre({ genre }: { genre: GenreProps }) {
 					</DialogClose>
 
 					<Button
-						onClick={() => {
-							disableGenre(genre);
-							setOpen(false);
+						onClick={async () => {
+							try {
+								await disableGenre(genre);
+
+								setOpen(false);
+							} catch (error) {
+								console.error(error);
+							}
 						}}
 					>
 						Sim

@@ -41,9 +41,14 @@ export default function DisableBook({ book }: { book: BookProps }) {
 						<Button variant="ghost">Não</Button>
 					</DialogClose>
 					<Button
-						onClick={() => {
-							disableBook(book);
-							setOpen(false);
+						onClick={async () => {
+							try {
+								await disableBook(book);
+
+								setOpen(false);
+							} catch (error) {
+								console.error(error);
+							}
 						}}
 					>
 						Sim
