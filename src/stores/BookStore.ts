@@ -69,7 +69,7 @@ export const useBookStore = create<BookStoreProps>((set) => ({
 
 			set({ books });
 		} catch (err) {
-			toast.error("Erro inesperado ao buscar livros!");
+			toast.error("Erro inesperado ao buscar livros.");
 			set({ error: err });
 		}
 	},
@@ -82,7 +82,7 @@ export const useBookStore = create<BookStoreProps>((set) => ({
 				books: [...state.books, data],
 			}));
 
-			toast.success("Livro cadastrado com sucesso!");
+			toast.success("Livro cadastrado com sucesso.");
 		} catch (err) {
 			const error = err as AxiosError<{
 				message?: string;
@@ -90,7 +90,8 @@ export const useBookStore = create<BookStoreProps>((set) => ({
 			}>;
 
 			const message =
-				error?.response?.data?.message || "Erro ao cadastrar o livro.";
+				error?.response?.data?.message ||
+				"Erro inesperado ao cadastrar o livro.";
 
 			toast.error(message);
 
@@ -107,7 +108,7 @@ export const useBookStore = create<BookStoreProps>((set) => ({
 				books: state.books.filter((b) => b.id !== book.id),
 			}));
 
-			toast.success("Livro desativado com sucesso!");
+			toast.success("Livro desativado com sucesso.");
 		} catch (err) {
 			toast.error("Erro ao desativar o livro.");
 			set({ error: err });
@@ -123,7 +124,7 @@ export const useBookStore = create<BookStoreProps>((set) => ({
 				books: state.books.map((b) => (b.id === book.id ? data : b)),
 			}));
 
-			toast.success("Livro atualizado com sucesso!");
+			toast.success("Livro atualizado com sucesso.");
 		} catch (err) {
 			const error = err as AxiosError<{
 				message?: string;
@@ -131,7 +132,8 @@ export const useBookStore = create<BookStoreProps>((set) => ({
 			}>;
 
 			const message =
-				error?.response?.data?.message || "Erro ao atualizar o livro.";
+				error?.response?.data?.message ||
+				"Erro inesperado ao atualizar o livro.";
 
 			toast.error(message);
 

@@ -1,3 +1,4 @@
+import type { AxiosError } from "axios";
 import { toast } from "sonner";
 import { z } from "zod";
 import { create } from "zustand";
@@ -35,7 +36,7 @@ export const useGenreStore = create<GenreStoreProps>((set) => ({
 			set({ genres });
 		} catch (err) {
 			console.error(err);
-			toast.error("Erro inesperado ao buscar gêneros!");
+			toast.error("Erro inesperado ao buscar gêneros.");
 			set({ error: err });
 		}
 	},
@@ -50,9 +51,19 @@ export const useGenreStore = create<GenreStoreProps>((set) => ({
 
 			toast.success("Gênero adicionado com sucesso!");
 		} catch (err) {
-			console.error(err);
-			toast.error("Erro inesperado ao adicionar gênero!");
+			const error = err as AxiosError<{
+				message?: string;
+				errors?: Record<string, string[]>;
+			}>;
+
+			const message =
+				error?.response?.data?.message ||
+				"Erro inesperado ao adicionar gênero.";
+
+			toast.error(message);
+
 			set({ error: err });
+			throw err;
 		}
 	},
 
@@ -82,9 +93,19 @@ export const useGenreStore = create<GenreStoreProps>((set) => ({
 
 			toast.success("Gênero atualizado com sucesso!");
 		} catch (err) {
-			console.error(err);
-			toast.error("Erro inesperado ao atualizar gênero!");
+			const error = err as AxiosError<{
+				message?: string;
+				errors?: Record<string, string[]>;
+			}>;
+
+			const message =
+				error?.response?.data?.message ||
+				"Erro inesperado ao atualizar gênero.";
+
+			toast.error(message);
+
 			set({ error: err });
+			throw err;
 		}
 	},
 }));

@@ -1,3 +1,4 @@
+import type { AxiosError } from "axios";
 import { toast } from "sonner";
 import { z } from "zod";
 import { create } from "zustand";
@@ -35,7 +36,7 @@ export const useAuthorStore = create<AuthorStoreProps>((set) => ({
 			set({ authors });
 		} catch (err) {
 			console.error(err);
-			toast.error("Erro inesperado ao buscar autores!");
+			toast.error("Erro inesperado ao buscar autores.");
 			set({ error: err });
 		}
 	},
@@ -48,11 +49,20 @@ export const useAuthorStore = create<AuthorStoreProps>((set) => ({
 				authors: [...state.authors, data],
 			}));
 
-			toast.success("Autor adicionado com sucesso!");
+			toast.success("Autor adicionado com sucesso.");
 		} catch (err) {
-			console.error(err);
-			toast.error("Erro inesperado ao adicionar autor!");
+			const error = err as AxiosError<{
+				message?: string;
+				errors?: Record<string, string[]>;
+			}>;
+
+			const message =
+				error?.response?.data?.message || "Erro inesperado ao adicionar autor.";
+
+			toast.error(message);
+
 			set({ error: err });
+			throw err;
 		}
 	},
 
@@ -64,10 +74,10 @@ export const useAuthorStore = create<AuthorStoreProps>((set) => ({
 				authors: state.authors.filter((a) => a.id !== author.id),
 			}));
 
-			toast.success("Autor desativado com sucesso!");
+			toast.success("Autor desativado com sucesso.");
 		} catch (err) {
 			console.error(err);
-			toast.error("Erro inesperado ao desativar autor!");
+			toast.error("Erro inesperado ao desativar autor.");
 			set({ error: err });
 		}
 	},
@@ -80,11 +90,20 @@ export const useAuthorStore = create<AuthorStoreProps>((set) => ({
 				authors: state.authors.map((a) => (a.id === author.id ? data : a)),
 			}));
 
-			toast.success("Autor atualizado com sucesso!");
+			toast.success("Autor atualizado com sucesso.");
 		} catch (err) {
-			console.error(err);
-			toast.error("Erro inesperado ao atualizar autor!");
+			const error = err as AxiosError<{
+				message?: string;
+				errors?: Record<string, string[]>;
+			}>;
+
+			const message =
+				error?.response?.data?.message || "Erro inesperado ao atualizar autor.";
+
+			toast.error(message);
+
 			set({ error: err });
+			throw err;
 		}
 	},
 }));

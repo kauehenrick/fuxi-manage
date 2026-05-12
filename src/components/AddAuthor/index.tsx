@@ -62,12 +62,12 @@ export default function AddAuthor() {
 							control={form.control}
 							render={({ field, fieldState }) => (
 								<Field data-invalid={fieldState.invalid}>
-									<FieldLabel htmlFor="name">Nome do Autor</FieldLabel>
+									<FieldLabel htmlFor="name">Nome do Autor(a)</FieldLabel>
 									<Input
 										{...field}
 										id="name"
 										aria-invalid={fieldState.invalid}
-										placeholder="Informe o nome do autor"
+										placeholder="Informe o nome do autor(a)"
 										autoComplete="off"
 									/>
 									{fieldState.invalid && (

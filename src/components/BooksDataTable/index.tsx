@@ -6,7 +6,7 @@ import { DataTable } from "./data-table";
 export default function BooksDataTable() {
 	const books = useBookStore((state) => state.books);
 	const getBooks = useBookStore((state) => state.getBooks);
-	// const activeBooks = books.filter((book) => book.isActive);
+	const activeBooks = books.filter((book) => !book.deleted_at);
 
 	useEffect(() => {
 		getBooks();
@@ -14,7 +14,7 @@ export default function BooksDataTable() {
 
 	return (
 		<div className="container mt-4">
-			<DataTable columns={columns} data={books} />
+			<DataTable columns={columns} data={activeBooks} />
 		</div>
 	);
 }
