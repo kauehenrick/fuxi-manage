@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import type { z } from "zod";
 import {
@@ -17,7 +17,11 @@ import { authorFormSchema, useAuthorStore } from "@/stores/AuthorStore";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
-export default function AddAuthor() {
+type AddAuthorProps = {
+	trigger?: ReactNode;
+};
+
+export default function AddAuthor({ trigger }: AddAuthorProps) {
 	const [open, setOpen] = useState(false);
 	const { addAuthor } = useAuthorStore();
 
@@ -39,23 +43,35 @@ export default function AddAuthor() {
 		}
 	}
 
+	function handleOpenChange(value: boolean) {
+		if (value) {
+			form.reset();
+		}
+		setOpen(value);
+	}
+
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger asChild>
-				<Button
-					onClick={() => {
-						form.reset();
-					}}
-				>
-					Adicionar
-				</Button>
+		<Dialog open={open} onOpenChange={handleOpenChange}>
+			<DialogTrigger
+				asChild
+				onClick={(event) => {
+					event.stopPropagation();
+				}}
+			>
+				{trigger ?? <Button>Adicionar</Button>}
 			</DialogTrigger>
 			<DialogContent className="w-4/12">
 				<DialogHeader>
 					<DialogTitle>Cadastrar Autor</DialogTitle>
 					<DialogDescription></DialogDescription>
 				</DialogHeader>
-				<form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+				<form
+					className="space-y-6"
+					onSubmit={(event) => {
+						event.stopPropagation();
+						void form.handleSubmit(onSubmit)(event);
+					}}
+				>
 					<section className="flex items-start gap-3 rounded-md border bg-white-300 px-3 py-2">
 						<Controller
 							name="name"

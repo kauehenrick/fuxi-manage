@@ -19,7 +19,13 @@ export const columns: ColumnDef<BookProps>[] = [
 				#
 			</button>
 		),
-		cell: ({ row }) => <span>{row.index + 1}</span>,
+		cell: ({ row }) => (
+			<span
+				className={row.original.deleted_at ? "text-red-800 opacity-80" : ""}
+			>
+				{row.original.id}
+			</span>
+		),
 	},
 	{
 		accessorKey: "title",
@@ -31,6 +37,13 @@ export const columns: ColumnDef<BookProps>[] = [
 			>
 				Título
 			</button>
+		),
+		cell: ({ row }) => (
+			<span
+				className={row.original.deleted_at ? "text-red-800 opacity-80" : ""}
+			>
+				{row.original.title}
+			</span>
 		),
 		filterFn: includesString,
 	},
@@ -51,7 +64,13 @@ export const columns: ColumnDef<BookProps>[] = [
 
 			const author = authors.find((a) => a.id === authorId);
 
-			return <span>{author?.name ?? ""}</span>;
+			return (
+				<span
+					className={row.original.deleted_at ? "text-red-800 opacity-80" : ""}
+				>
+					{author?.name ?? ""}
+				</span>
+			);
 		},
 	},
 	{
@@ -71,7 +90,13 @@ export const columns: ColumnDef<BookProps>[] = [
 
 			const genre = genres.find((g) => g.id === genreId);
 
-			return <span>{genre?.name ?? ""}</span>;
+			return (
+				<span
+					className={row.original.deleted_at ? "text-red-800 opacity-80" : ""}
+				>
+					{genre?.name ?? ""}
+				</span>
+			);
 		},
 	},
 	{
@@ -85,6 +110,13 @@ export const columns: ColumnDef<BookProps>[] = [
 				Ano
 			</button>
 		),
+		cell: ({ row }) => (
+			<span
+				className={row.original.deleted_at ? "text-red-800 opacity-80" : ""}
+			>
+				{row.original.published_year}
+			</span>
+		),
 	},
 	{
 		accessorKey: "localization",
@@ -96,6 +128,13 @@ export const columns: ColumnDef<BookProps>[] = [
 			>
 				Localização
 			</button>
+		),
+		cell: ({ row }) => (
+			<span
+				className={row.original.deleted_at ? "text-red-800 opacity-80" : ""}
+			>
+				{row.original.localization}
+			</span>
 		),
 	},
 	{
@@ -109,15 +148,23 @@ export const columns: ColumnDef<BookProps>[] = [
 				ISBN
 			</button>
 		),
+		cell: ({ row }) => (
+			<span
+				className={row.original.deleted_at ? "text-red-800 opacity-80" : ""}
+			>
+				{row.original.isbn}
+			</span>
+		),
 	},
 	{
 		accessorKey: "actions",
 		header: () => <p className="me-5 text-right">Ações</p>,
-		cell: (cell) => (
-			<div className="me-5 flex justify-end space-x-4">
-				<UpdateBook {...cell.row.original} />
-				<DisableBook book={cell.row.original} />
-			</div>
-		),
+		cell: (cell) =>
+			!cell.row.original.deleted_at && (
+				<div className="me-5 flex justify-end space-x-4">
+					<UpdateBook {...cell.row.original} />
+					<DisableBook book={cell.row.original} />
+				</div>
+			),
 	},
 ];

@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { PiPencilLineThin } from "react-icons/pi";
 import type { z } from "zod";
@@ -30,6 +30,15 @@ export default function UpdateAuthor(author: AuthorProps) {
 			name: author.name,
 		},
 	});
+
+	useEffect(() => {
+		if (open) {
+			form.reset({
+				id: author.id,
+				name: author.name,
+			});
+		}
+	}, [author, open, form]);
 
 	async function onSubmit(values: z.infer<typeof authorFormSchema>) {
 		try {

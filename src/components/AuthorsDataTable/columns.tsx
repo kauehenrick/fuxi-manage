@@ -17,7 +17,7 @@ export const columns: ColumnDef<AuthorProps>[] = [
 				#
 			</button>
 		),
-		cell: ({ row }) => <span>{row.index + 1}</span>,
+		cell: ({ row }) => <span>{row.original.id}</span>,
 	},
 	{
 		accessorKey: "name",

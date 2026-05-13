@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { PiPlusCircleBold } from "react-icons/pi";
 import type { z } from "zod";
 import {
 	Accordion,
@@ -20,6 +21,8 @@ import {
 } from "@/components/ui/dialog";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { bookFormSchema, useBookStore } from "@/stores/BookStore";
+import AddAuthor from "../AddAuthor";
+import AddGenre from "../AddGenre";
 import AuthorSelect from "../ui/author-select";
 import { Button } from "../ui/button";
 import GenreSelect from "../ui/genre-select";
@@ -84,7 +87,7 @@ export default function AddBook() {
 							control={form.control}
 							render={({ field, fieldState }) => (
 								<Field data-invalid={fieldState.invalid}>
-									<FieldLabel htmlFor="title">Título</FieldLabel>
+									<FieldLabel htmlFor="title">Título </FieldLabel>
 									<Input
 										{...field}
 										id="title"
@@ -104,7 +107,20 @@ export default function AddBook() {
 							control={form.control}
 							render={({ field, fieldState }) => (
 								<Field data-invalid={fieldState.invalid}>
-									<FieldLabel>Autor</FieldLabel>
+									<div className="flex items-center gap-2">
+										<FieldLabel htmlFor="author">Autor</FieldLabel>
+										<AddAuthor
+											trigger={
+												<button
+													type="button"
+													className="cursor-pointer"
+													aria-label="Adicionar autor"
+												>
+													<PiPlusCircleBold className="text-green-primary" />
+												</button>
+											}
+										/>
+									</div>
 
 									<AuthorSelect value={field.value} onChange={field.onChange} />
 
@@ -120,7 +136,20 @@ export default function AddBook() {
 							control={form.control}
 							render={({ field, fieldState }) => (
 								<Field data-invalid={fieldState.invalid}>
-									<FieldLabel>Gênero</FieldLabel>
+									<div className="flex items-center gap-2">
+										<FieldLabel htmlFor="genre">Gênero</FieldLabel>
+										<AddGenre
+											trigger={
+												<button
+													type="button"
+													className="cursor-pointer"
+													aria-label="Adicionar gênero"
+												>
+													<PiPlusCircleBold className="text-green-primary" />
+												</button>
+											}
+										/>
+									</div>
 
 									<GenreSelect value={field.value} onChange={field.onChange} />
 

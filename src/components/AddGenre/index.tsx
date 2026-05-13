@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import type { z } from "zod";
 import {
@@ -17,7 +17,11 @@ import { genreFormSchema, useGenreStore } from "@/stores/GenreStore";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
-export default function AddGenre() {
+type AddGenreProps = {
+	trigger?: ReactNode;
+};
+
+export default function AddGenre({ trigger }: AddGenreProps) {
 	const [open, setOpen] = useState(false);
 	const { addGenre } = useGenreStore();
 
@@ -39,23 +43,30 @@ export default function AddGenre() {
 		}
 	}
 
+	function handleOpenChange(value: boolean) {
+		if (value) {
+			form.reset();
+		}
+		setOpen(value);
+	}
+
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
+		<Dialog open={open} onOpenChange={handleOpenChange}>
 			<DialogTrigger asChild>
-				<Button
-					onClick={() => {
-						form.reset();
-					}}
-				>
-					Adicionar
-				</Button>
+				{trigger ?? <Button>Adicionar</Button>}
 			</DialogTrigger>
 			<DialogContent className="w-4/12">
 				<DialogHeader>
 					<DialogTitle>Cadastrar Gênero</DialogTitle>
 					<DialogDescription></DialogDescription>
 				</DialogHeader>
-				<form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+				<form
+					className="space-y-6"
+					onSubmit={(event) => {
+						event.stopPropagation();
+						void form.handleSubmit(onSubmit)(event);
+					}}
+				>
 					<section className="flex items-start gap-3 rounded-md border bg-white-300 px-3 py-2">
 						<Controller
 							name="name"
