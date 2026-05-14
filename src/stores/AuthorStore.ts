@@ -19,6 +19,7 @@ type AuthorStoreProps = {
 	addAuthor: (author: Omit<AuthorProps, "id" | "deleted_at">) => Promise<void>;
 	disableAuthor: (author: AuthorProps) => Promise<void>;
 	updateAuthor: (author: AuthorProps) => Promise<void>;
+	enableAuthor: (author: AuthorProps) => Promise<void>;
 };
 
 export const useAuthorStore = create<AuthorStoreProps>((set) => ({
@@ -68,10 +69,17 @@ export const useAuthorStore = create<AuthorStoreProps>((set) => ({
 
 	disableAuthor: async (author) => {
 		try {
-			await api.delete(`/authors/${author.id}`);
+			const { data } = await api.delete(`/authors/${author.id}`);
 
 			set((state) => ({
-				authors: state.authors.filter((a) => a.id !== author.id),
+				authors: state.authors.map((a) =>
+					a.id === author.id
+						? {
+								...a,
+								deleted_at: data.author.deleted_at,
+							}
+						: a,
+				),
 			}));
 
 			toast.success("Autor desativado com sucesso.");
@@ -102,6 +110,24 @@ export const useAuthorStore = create<AuthorStoreProps>((set) => ({
 
 			toast.error(message);
 
+			set({ error: err });
+			throw err;
+		}
+	},
+
+	enableAuthor: async (author) => {
+		try {
+			const { data } = await api.patch(`/authors/${author.id}/restore`);
+
+			set((state) => ({
+				authors: state.authors.map((a) =>
+					a.id === author.id ? data.author : a,
+				),
+			}));
+
+			toast.success("Autor habilitado com sucesso.");
+		} catch (err) {
+			toast.error("Erro ao habilitar o autor.");
 			set({ error: err });
 			throw err;
 		}

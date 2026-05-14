@@ -19,6 +19,7 @@ type GenreStoreProps = {
 	addGenre: (genre: Omit<GenreProps, "id" | "isActive">) => Promise<void>;
 	disableGenre: (genre: GenreProps) => Promise<void>;
 	updateGenre: (genre: GenreProps) => Promise<void>;
+	enableGenre: (genre: GenreProps) => Promise<void>;
 };
 
 export const useGenreStore = create<GenreStoreProps>((set) => ({
@@ -69,10 +70,17 @@ export const useGenreStore = create<GenreStoreProps>((set) => ({
 
 	disableGenre: async (genre) => {
 		try {
-			await api.delete(`/genres/${genre.id}`);
+			const { data } = await api.delete(`/genres/${genre.id}`);
 
 			set((state) => ({
-				genres: state.genres.filter((g) => g.id !== genre.id),
+				genres: state.genres.map((g) =>
+					g.id === genre.id
+						? {
+								...g,
+								deleted_at: data.genre.deleted_at,
+							}
+						: g,
+				),
 			}));
 
 			toast.success("Gênero desativado com sucesso!");
@@ -104,6 +112,22 @@ export const useGenreStore = create<GenreStoreProps>((set) => ({
 
 			toast.error(message);
 
+			set({ error: err });
+			throw err;
+		}
+	},
+
+	enableGenre: async (genre) => {
+		try {
+			const { data } = await api.patch(`/genres/${genre.id}/restore`);
+
+			set((state) => ({
+				genres: state.genres.map((g) => (g.id === genre.id ? data.genre : g)),
+			}));
+
+			toast.success("Autor habilitado com sucesso.");
+		} catch (err) {
+			toast.error("Erro ao habilitar o autor.");
 			set({ error: err });
 			throw err;
 		}

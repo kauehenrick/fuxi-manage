@@ -2,6 +2,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import type { GenreProps } from "@/stores/GenreStore";
 import { includesString } from "../../lib/utils";
 import DisableGenre from "../DisableGenre";
+import EnableGenre from "../EnableGenre";
 import UpdateGenre from "../UpdateGenre";
 
 export const columns: ColumnDef<GenreProps>[] = [
@@ -17,7 +18,13 @@ export const columns: ColumnDef<GenreProps>[] = [
 				#
 			</button>
 		),
-		cell: ({ row }) => <span>{row.original.id}</span>,
+		cell: ({ row }) => (
+			<span
+				className={row.original.deleted_at ? "text-red-800 opacity-80" : ""}
+			>
+				{row.original.id}
+			</span>
+		),
 	},
 	{
 		accessorKey: "name",
@@ -30,16 +37,28 @@ export const columns: ColumnDef<GenreProps>[] = [
 				Gênero
 			</button>
 		),
+		cell: ({ row }) => (
+			<span
+				className={row.original.deleted_at ? "text-red-800 opacity-80" : ""}
+			>
+				{row.original.name}
+			</span>
+		),
 		filterFn: includesString,
 	},
 	{
 		accessorKey: "actions",
 		header: () => <p className="me-5 text-right">Ações</p>,
-		cell: (cell) => (
-			<div className="me-5 flex justify-end space-x-4">
-				<UpdateGenre {...cell.row.original} />
-				<DisableGenre genre={cell.row.original} />
-			</div>
-		),
+		cell: (cell) =>
+			!cell.row.original.deleted_at ? (
+				<div className="me-5 flex justify-end space-x-4">
+					<UpdateGenre {...cell.row.original} />
+					<DisableGenre genre={cell.row.original} />
+				</div>
+			) : (
+				<div className="me-5 flex justify-end space-x-4">
+					<EnableGenre genre={cell.row.original} />
+				</div>
+			),
 	},
 ];

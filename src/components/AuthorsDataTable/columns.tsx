@@ -2,6 +2,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 import type { AuthorProps } from "@/stores/AuthorStore";
 import { includesString } from "../../lib/utils";
 import DisableAuthor from "../DisableAuthor";
+import EnableAuthor from "../EnableAuthor";
 import UpdateAuthor from "../UpdateAuthor";
 
 export const columns: ColumnDef<AuthorProps>[] = [
@@ -17,7 +18,13 @@ export const columns: ColumnDef<AuthorProps>[] = [
 				#
 			</button>
 		),
-		cell: ({ row }) => <span>{row.original.id}</span>,
+		cell: ({ row }) => (
+			<span
+				className={row.original.deleted_at ? "text-red-800 opacity-80" : ""}
+			>
+				{row.original.id}
+			</span>
+		),
 	},
 	{
 		accessorKey: "name",
@@ -30,16 +37,28 @@ export const columns: ColumnDef<AuthorProps>[] = [
 				Nome do Autor
 			</button>
 		),
+		cell: ({ row }) => (
+			<span
+				className={row.original.deleted_at ? "text-red-800 opacity-80" : ""}
+			>
+				{row.original.name}
+			</span>
+		),
 		filterFn: includesString,
 	},
 	{
 		accessorKey: "actions",
 		header: () => <p className="me-5 text-right">Ações</p>,
-		cell: (cell) => (
-			<div className="me-5 flex justify-end space-x-4">
-				<UpdateAuthor {...cell.row.original} />
-				<DisableAuthor author={cell.row.original} />
-			</div>
-		),
+		cell: (cell) =>
+			!cell.row.original.deleted_at ? (
+				<div className="me-5 flex justify-end space-x-4">
+					<UpdateAuthor {...cell.row.original} />
+					<DisableAuthor author={cell.row.original} />
+				</div>
+			) : (
+				<div className="me-5 flex justify-end space-x-4">
+					<EnableAuthor author={cell.row.original} />
+				</div>
+			),
 	},
 ];

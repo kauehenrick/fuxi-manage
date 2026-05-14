@@ -6,7 +6,6 @@ import { DataTable } from "./data-table";
 export default function GenresDataTable() {
 	const genres = useGenreStore((state) => state.genres);
 	const getGenres = useGenreStore((state) => state.getGenres);
-	const activeGenres = genres.filter((genre) => !genre.deleted_at);
 
 	useEffect(() => {
 		getGenres();
@@ -14,7 +13,7 @@ export default function GenresDataTable() {
 
 	return (
 		<div className="container mt-4">
-			<DataTable columns={columns} data={activeGenres} />
+			<DataTable columns={columns} data={genres} />
 		</div>
 	);
 }

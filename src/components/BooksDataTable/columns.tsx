@@ -4,6 +4,7 @@ import type { BookProps } from "@/stores/BookStore";
 import { useGenreStore } from "@/stores/GenreStore";
 import { includesString } from "../../lib/utils";
 import DisableBook from "../DisableBook";
+import EnableBook from "../EnableBook";
 import UpdateBook from "../UpdateBook";
 
 export const columns: ColumnDef<BookProps>[] = [
@@ -160,10 +161,14 @@ export const columns: ColumnDef<BookProps>[] = [
 		accessorKey: "actions",
 		header: () => <p className="me-5 text-right">Ações</p>,
 		cell: (cell) =>
-			!cell.row.original.deleted_at && (
+			!cell.row.original.deleted_at ? (
 				<div className="me-5 flex justify-end space-x-4">
 					<UpdateBook {...cell.row.original} />
 					<DisableBook book={cell.row.original} />
+				</div>
+			) : (
+				<div className="me-5 flex justify-end space-x-4">
+					<EnableBook book={cell.row.original} />
 				</div>
 			),
 	},

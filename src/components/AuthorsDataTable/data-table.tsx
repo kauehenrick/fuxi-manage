@@ -10,10 +10,17 @@ import {
 	useReactTable,
 } from "@tanstack/react-table";
 import * as React from "react";
-import { PiMagnifyingGlassLight } from "react-icons/pi";
+import { PiMagnifyingGlassLight, PiSlidersThin } from "react-icons/pi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Switch } from "@/components/ui/switch";
 import {
 	Table,
 	TableBody,
@@ -38,9 +45,18 @@ export function DataTable<TData, TValue>({
 	);
 	const [globalFilter, setGlobalFilter] = React.useState("");
 	const [rowSelection, setRowSelection] = React.useState({});
+	const [showDisabled, setShowDisabled] = React.useState(false);
+
+	const filteredData = React.useMemo(() => {
+		if (showDisabled) {
+			return data;
+		}
+
+		return data.filter((item: any) => item.deleted_at === null);
+	}, [data, showDisabled]);
 
 	const table = useReactTable({
-		data,
+		data: filteredData,
 		columns,
 		getCoreRowModel: getCoreRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
@@ -68,16 +84,37 @@ export function DataTable<TData, TValue>({
 			<section className="flex items-center justify-between px-6 py-2">
 				<p className="font-medium">Lista de Autores</p>
 
-				<Input
-					type="text"
-					placeholder="Pesquisar autores..."
-					startIcon={<PiMagnifyingGlassLight />}
-					value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-					onChange={(event) =>
-						table.getColumn("name")?.setFilterValue(event.target.value)
-					}
-					className="h-7.5 min-w-70"
-				/>
+				<div className="flex gap-4">
+					<Input
+						type="text"
+						placeholder="Pesquisar autores..."
+						startIcon={<PiMagnifyingGlassLight />}
+						value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+						onChange={(event) =>
+							table.getColumn("name")?.setFilterValue(event.target.value)
+						}
+						className="h-7.5 min-w-70"
+					/>
+
+					<Popover>
+						<PopoverTrigger asChild>
+							<button type="button" className="cursor-pointer">
+								<PiSlidersThin />
+							</button>
+						</PopoverTrigger>
+						<PopoverContent side="left" className="w-50">
+							<div className="flex items-center space-x-2">
+								<Switch
+									id="disabled-itens"
+									size="sm"
+									checked={showDisabled}
+									onCheckedChange={setShowDisabled}
+								/>
+								<Label htmlFor="disabled-itens">Mostrar desativados</Label>
+							</div>
+						</PopoverContent>
+					</Popover>
+				</div>
 			</section>
 
 			<ScrollArea className="h-87.5 2xl:h-112.5">

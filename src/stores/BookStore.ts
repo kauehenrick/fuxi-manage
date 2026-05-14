@@ -53,6 +53,7 @@ type BookStoreProps = {
 	addBook: (book: Omit<BookProps, "id" | "deleted_at">) => Promise<void>;
 	disableBook: (book: BookProps) => Promise<void>;
 	updateBook: (book: Partial<BookProps> & { id: number }) => Promise<void>;
+	enableBook: (book: BookProps) => Promise<void>;
 };
 
 export const useBookStore = create<BookStoreProps>((set) => ({
@@ -102,10 +103,17 @@ export const useBookStore = create<BookStoreProps>((set) => ({
 
 	disableBook: async (book) => {
 		try {
-			await api.delete(`/books/${book.id}`);
+			const { data } = await api.delete(`/books/${book.id}`);
 
 			set((state) => ({
-				books: state.books.filter((b) => b.id !== book.id),
+				books: state.books.map((b) =>
+					b.id === book.id
+						? {
+								...b,
+								deleted_at: data.book.deleted_at,
+							}
+						: b,
+				),
 			}));
 
 			toast.success("Livro desativado com sucesso.");
@@ -137,6 +145,22 @@ export const useBookStore = create<BookStoreProps>((set) => ({
 
 			toast.error(message);
 
+			set({ error: err });
+			throw err;
+		}
+	},
+
+	enableBook: async (book) => {
+		try {
+			const { data } = await api.patch(`/books/${book.id}/restore`);
+
+			set((state) => ({
+				books: state.books.map((b) => (b.id === book.id ? data.book : b)),
+			}));
+
+			toast.success("Livro habilitado com sucesso.");
+		} catch (err) {
+			toast.error("Erro ao habilitar o livro.");
 			set({ error: err });
 			throw err;
 		}

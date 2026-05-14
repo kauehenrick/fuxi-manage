@@ -6,7 +6,6 @@ import { DataTable } from "./data-table";
 export default function AuthorsDataTable() {
 	const authors = useAuthorStore((state) => state.authors);
 	const getAuthors = useAuthorStore((state) => state.getAuthors);
-	const activeAuthors = authors.filter((author) => !author.deleted_at);
 
 	useEffect(() => {
 		getAuthors();
@@ -14,7 +13,7 @@ export default function AuthorsDataTable() {
 
 	return (
 		<div className="container mt-4">
-			<DataTable columns={columns} data={activeAuthors} />
+			<DataTable columns={columns} data={authors} />
 		</div>
 	);
 }
