@@ -84,9 +84,18 @@ export const useAuthorStore = create<AuthorStoreProps>((set) => ({
 
 			toast.success("Autor desativado com sucesso.");
 		} catch (err) {
-			console.error(err);
-			toast.error("Erro inesperado ao desativar autor.");
+			const error = err as AxiosError<{
+				message?: string;
+				errors?: Record<string, string[]>;
+			}>;
+
+			const message =
+				error?.response?.data?.message || "Erro inesperado ao desativar autor.";
+
+			toast.error(message);
+
 			set({ error: err });
+			throw err;
 		}
 	},
 

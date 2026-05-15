@@ -1,8 +1,8 @@
 import AddGenre from "@/components/AddGenre";
+import ExportButton from "@/components/ExportButton";
 import GenresDataTable from "@/components/GenresDataTable";
 import Header from "@/components/Header/Header";
 import Sidebar from "@/components/Sidebar/Sidebar";
-import { Button } from "@/components/ui/button";
 
 export default function GenrePage() {
 	return (
@@ -15,7 +15,7 @@ export default function GenrePage() {
 				<main className="w-full px-6">
 					<div className="mt-4 space-x-2">
 						<AddGenre />
-						<Button>Exportar</Button>
+						<ExportButton />
 					</div>
 
 					<GenresDataTable />
