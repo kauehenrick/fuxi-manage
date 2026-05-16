@@ -1,5 +1,4 @@
 import AddGenre from "@/components/AddGenre";
-import ExportButton from "@/components/ExportButton";
 import GenresDataTable from "@/components/GenresDataTable";
 import Header from "@/components/Header/Header";
 import Sidebar from "@/components/Sidebar/Sidebar";
@@ -15,7 +14,6 @@ export default function GenrePage() {
 				<main className="w-full px-6">
 					<div className="mt-4 space-x-2">
 						<AddGenre />
-						<ExportButton />
 					</div>
 
 					<GenresDataTable />

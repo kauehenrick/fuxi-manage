@@ -2,8 +2,6 @@ import {
 	PiBook,
 	PiCirclesThreePlusLight,
 	PiFlyingSaucerLight,
-	PiGearLight,
-	PiHouseLight,
 	PiPenNibLight,
 	PiUserCircleFill,
 } from "react-icons/pi";
@@ -23,7 +21,7 @@ export default function Sidebar() {
 	const registerOptions = [
 		{
 			title: "Livros",
-			url: "/books",
+			url: "/",
 			icon: PiBook,
 			value: "products",
 		},
@@ -56,12 +54,12 @@ export default function Sidebar() {
 				/>
 
 				<section>
-					<MenuOption
+					{/* <MenuOption
 						title="Tela inicial"
 						url="/"
 						icon={PiHouseLight}
 						value="home"
-					/>
+					/> */}
 
 					<Accordion
 						type="single"
@@ -89,12 +87,12 @@ export default function Sidebar() {
 						</AccordionItem>
 					</Accordion>
 
-					<MenuOption
+					{/* <MenuOption
 						title="Configurações"
 						url="/settings"
 						icon={PiGearLight}
 						value="settings"
-					/>
+					/> */}
 				</section>
 			</div>
 
@@ -102,7 +100,7 @@ export default function Sidebar() {
 				<PiUserCircleFill className="cursor-pointer" size={"2.5rem"} />
 				<div>
 					<p>Usuário</p>
-					<p>versão: 0.0.1</p>
+					<p className="font-light">versão: {__APP_VERSION__}</p>
 				</div>
 			</footer>
 		</aside>
