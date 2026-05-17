@@ -3,6 +3,7 @@ import {
 	PiCirclesThreePlusLight,
 	PiFlyingSaucerLight,
 	PiPenNibLight,
+	PiSignOut,
 	PiUserCircleFill,
 } from "react-icons/pi";
 import {
@@ -11,12 +12,19 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
+import { useAuthStore } from "@/stores/AuthStore";
 import { useSidebarStore } from "@/stores/SidebarStore";
 import logoFuXiImg from "../../assets/fuxi-logo.svg";
 import MenuOption from "../ui/menu-option";
 
 export default function Sidebar() {
 	const { selectedOption } = useSidebarStore();
+	const { user, logout } = useAuthStore();
 
 	const registerOptions = [
 		{
@@ -37,7 +45,6 @@ export default function Sidebar() {
 			icon: PiFlyingSaucerLight,
 			value: "genres",
 		},
-		/*{ title: "Pessoas", url: "/people", icon: PiUserLight, value: "people" },*/
 	];
 
 	const isRegisterSelected = registerOptions.some(
@@ -97,9 +104,23 @@ export default function Sidebar() {
 			</div>
 
 			<footer className="ms-4 mb-4 flex items-center gap-3 text-xs">
-				<PiUserCircleFill className="cursor-pointer" size={"2.5rem"} />
+				<Popover>
+					<PopoverTrigger asChild>
+						<PiUserCircleFill className="cursor-pointer" size={"2.5rem"} />
+					</PopoverTrigger>
+					<PopoverContent className="ms-2 w-30 p-0">
+						<button
+							type="button"
+							className="flex w-full cursor-pointer items-center space-x-2 p-2 transition duration-300 hover:bg-white-300"
+							onClick={logout}
+						>
+							<PiSignOut />
+							<p className="text-sm">Sair</p>
+						</button>
+					</PopoverContent>
+				</Popover>
 				<div>
-					<p>Usuário</p>
+					<p>{user?.name ?? "Usuário"}</p>
 					<p className="font-light">versão: {__APP_VERSION__}</p>
 				</div>
 			</footer>

@@ -101,6 +101,25 @@ export const columns: ColumnDef<BookProps>[] = [
 		},
 	},
 	{
+		accessorKey: "amount",
+		header: ({ column }) => (
+			<button
+				type="button"
+				className="cursor-pointer"
+				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+			>
+				Quantidade
+			</button>
+		),
+		cell: ({ row }) => (
+			<span
+				className={row.original.deleted_at ? "text-red-800 opacity-80" : ""}
+			>
+				{row.original.amount}
+			</span>
+		),
+	},
+	{
 		accessorKey: "published_year",
 		header: ({ column }) => (
 			<button
@@ -116,25 +135,6 @@ export const columns: ColumnDef<BookProps>[] = [
 				className={row.original.deleted_at ? "text-red-800 opacity-80" : ""}
 			>
 				{row.original.published_year}
-			</span>
-		),
-	},
-	{
-		accessorKey: "localization",
-		header: ({ column }) => (
-			<button
-				type="button"
-				className="cursor-pointer"
-				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-			>
-				Localização
-			</button>
-		),
-		cell: ({ row }) => (
-			<span
-				className={row.original.deleted_at ? "text-red-800 opacity-80" : ""}
-			>
-				{row.original.localization}
 			</span>
 		),
 	},

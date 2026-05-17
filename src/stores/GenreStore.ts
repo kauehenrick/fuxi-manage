@@ -6,7 +6,7 @@ import { api } from "../services/api";
 
 export const genreFormSchema = z.object({
 	id: z.number().optional(),
-	deleted_at: z.date().optional(),
+	deleted_at: z.string().nullable().optional(),
 	name: z.string().min(2, { message: "O nome do gênero deve ser informado." }),
 });
 
@@ -15,6 +15,7 @@ export type GenreProps = z.infer<typeof genreFormSchema>;
 type GenreStoreProps = {
 	genres: GenreProps[];
 	error: null | string | unknown;
+	hasLoaded: boolean;
 	getGenres: () => Promise<void>;
 	addGenre: (genre: Omit<GenreProps, "id" | "isActive">) => Promise<void>;
 	disableGenre: (genre: GenreProps) => Promise<void>;
@@ -22,11 +23,14 @@ type GenreStoreProps = {
 	enableGenre: (genre: GenreProps) => Promise<void>;
 };
 
-export const useGenreStore = create<GenreStoreProps>((set) => ({
+export const useGenreStore = create<GenreStoreProps>((set, get) => ({
 	genres: [],
 	error: null,
+	hasLoaded: false,
 
 	getGenres: async () => {
+		if (get().hasLoaded) return;
+
 		try {
 			set({ error: null });
 
@@ -34,7 +38,7 @@ export const useGenreStore = create<GenreStoreProps>((set) => ({
 
 			const genres = data?.data ?? data ?? [];
 
-			set({ genres });
+			set({ genres, hasLoaded: true });
 		} catch (err) {
 			console.error(err);
 			toast.error("Erro inesperado ao buscar gêneros.");

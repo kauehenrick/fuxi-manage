@@ -6,7 +6,7 @@ import { api } from "../services/api";
 
 export const authorFormSchema = z.object({
 	id: z.number().optional(),
-	deleted_at: z.date().optional(),
+	deleted_at: z.string().nullable().optional(),
 	name: z.string().min(2, { message: "O nome do autor deve ser informado." }),
 });
 
@@ -15,6 +15,7 @@ export type AuthorProps = z.infer<typeof authorFormSchema>;
 type AuthorStoreProps = {
 	authors: AuthorProps[];
 	error: null | string | unknown;
+	hasLoaded: boolean;
 	getAuthors: () => Promise<void>;
 	addAuthor: (author: Omit<AuthorProps, "id" | "deleted_at">) => Promise<void>;
 	disableAuthor: (author: AuthorProps) => Promise<void>;
@@ -22,11 +23,14 @@ type AuthorStoreProps = {
 	enableAuthor: (author: AuthorProps) => Promise<void>;
 };
 
-export const useAuthorStore = create<AuthorStoreProps>((set) => ({
+export const useAuthorStore = create<AuthorStoreProps>((set, get) => ({
 	authors: [],
 	error: null,
+	hasLoaded: false,
 
 	getAuthors: async () => {
+		if (get().hasLoaded) return;
+
 		try {
 			set({ error: null });
 
@@ -34,7 +38,7 @@ export const useAuthorStore = create<AuthorStoreProps>((set) => ({
 
 			const authors = data?.data ?? data ?? [];
 
-			set({ authors });
+			set({ authors, hasLoaded: true });
 		} catch (err) {
 			console.error(err);
 			toast.error("Erro inesperado ao buscar autores.");

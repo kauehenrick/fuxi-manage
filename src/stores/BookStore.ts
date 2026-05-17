@@ -6,7 +6,7 @@ import { api } from "../services/api";
 
 export const bookFormSchema = z.object({
 	id: z.number().optional(),
-	deleted_at: z.date().optional(),
+	deleted_at: z.string().nullable().optional(),
 	title: z.string().min(1, { message: "O título deve ser informado." }),
 	author_id: z.number().min(1, { message: "O autor deve ser informado." }),
 	genre_id: z.number().min(1, { message: "O gênero deve ser informado." }),
@@ -36,6 +36,7 @@ export const bookFormSchema = z.object({
 				message: "Insira um ano de publicação válido.",
 			},
 		),
+	amount: z.number().min(1, { message: "Informe a quantidade de livros." }),
 	localization: z.string().nullable(),
 	isbn: z.string().max(13, { message: "ISBN inválido." }).nullable(),
 });
@@ -49,6 +50,7 @@ export type BookProps = z.infer<typeof bookFormSchema>;
 type BookStoreProps = {
 	books: BookProps[];
 	error: null | string | unknown;
+	hasLoaded: boolean;
 	getBooks: () => Promise<void>;
 	addBook: (book: Omit<BookProps, "id" | "deleted_at">) => Promise<void>;
 	disableBook: (book: BookProps) => Promise<void>;
@@ -56,11 +58,14 @@ type BookStoreProps = {
 	enableBook: (book: BookProps) => Promise<void>;
 };
 
-export const useBookStore = create<BookStoreProps>((set) => ({
+export const useBookStore = create<BookStoreProps>((set, get) => ({
 	books: [],
 	error: null,
+	hasLoaded: false,
 
 	getBooks: async () => {
+		if (get().hasLoaded) return;
+
 		try {
 			set({ error: null });
 
@@ -68,7 +73,7 @@ export const useBookStore = create<BookStoreProps>((set) => ({
 
 			const books = data?.data ?? data ?? [];
 
-			set({ books });
+			set({ books, hasLoaded: true });
 		} catch (err) {
 			toast.error("Erro inesperado ao buscar livros.");
 			set({ error: err });

@@ -39,6 +39,7 @@ export default function AddBook() {
 			author_id: 0,
 			genre_id: 0,
 			published_year: null,
+			amount: 1,
 			localization: null,
 			isbn: null,
 		},
@@ -153,6 +154,32 @@ export default function AddBook() {
 
 									<GenreSelect value={field.value} onChange={field.onChange} />
 
+									{fieldState.invalid && (
+										<FieldError errors={[fieldState.error]} />
+									)}
+								</Field>
+							)}
+						/>
+
+						<Controller
+							name="amount"
+							control={form.control}
+							render={({ field, fieldState }) => (
+								<Field data-invalid={fieldState.invalid}>
+									<FieldLabel htmlFor="amout">Quantidade</FieldLabel>
+									<Input
+										{...field}
+										id="amount"
+										type="number"
+										aria-invalid={fieldState.invalid}
+										placeholder="Informe a quantidade de livros"
+										autoComplete="off"
+										onChange={(e) => {
+											const value = e.target.value;
+
+											field.onChange(value === "" ? undefined : Number(value));
+										}}
+									/>
 									{fieldState.invalid && (
 										<FieldError errors={[fieldState.error]} />
 									)}
