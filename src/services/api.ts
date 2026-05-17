@@ -6,7 +6,14 @@ export const api = axios.create({
 		"Content-Type": "application/json",
 		Accept: "application/json",
 	},
-	withCredentials: true,
+});
+
+api.interceptors.request.use((config) => {
+	const token = localStorage.getItem("token");
+	if (token) {
+		config.headers.Authorization = `Bearer ${token}`;
+	}
+	return config;
 });
 
 api.interceptors.response.use(
@@ -18,6 +25,7 @@ api.interceptors.response.use(
 		const ignoredRoutes = ["/login", "/me"];
 
 		if (status === 401 && !ignoredRoutes.includes(url)) {
+			localStorage.removeItem("token");
 			window.location.href = "/login";
 		}
 

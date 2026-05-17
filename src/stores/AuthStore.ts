@@ -45,6 +45,7 @@ export const useAuthStore = create<AuthStoreProps>((set) => ({
 			});
 
 			const { data } = await api.post("/login", credentials);
+			localStorage.setItem("token", data.token);
 
 			set({
 				user: data.user,
