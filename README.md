@@ -27,6 +27,6 @@ Os comandos disponíveis são `pnpm dev`, `pnpm build`, `pnpm preview`, `pnpm li
 ## Documentação
 
 - [Visão técnica do projeto](docs/PROJETO.md): arquitetura, rotas, fluxos, contrato de API e limitações conhecidas.
-- [Deploy da demo gratuita](docs/DEMO-GRATUITA.md): Vercel para o frontend, Render para a API Laravel e Supabase Postgres para persistência.
+- [Execução local](docs/EXECUCAO-LOCAL.md): como avaliar o sistema com a API e o MySQL em Docker na própria máquina.
 
 `VITE_*` é exposto no navegador durante o build. Não coloque tokens, senhas ou chaves nessas variáveis.

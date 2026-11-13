@@ -61,11 +61,11 @@ Campos enviados:
 - livro: `title`, `author_id`, `genre_id`, `published_year`, `amount`, `localization`, `isbn`;
 - autor e gênero: `name`.
 
-O backend deve habilitar CORS apenas para a URL da demo Vercel e para `http://localhost:5173`, permitir o cabeçalho `Authorization` e responder a `OPTIONS`. Tokens, chave de aplicação e credenciais de banco ficam exclusivamente no ambiente da API.
+O backend deve manter uma lista explícita de origens em `CORS_ALLOWED_ORIGINS`, permitir o cabeçalho `Authorization` e responder a `OPTIONS`. No desenvolvimento local, a origem esperada é `http://localhost:5173`. Tokens, chave de aplicação e credenciais de banco ficam exclusivamente no ambiente da API.
 
 ## Pendências conhecidas
 
 - Não há testes automatizados nem pipeline CI no repositório.
 - Exportação, Pessoas e Configurações são somente interface.
 - Os dados ficam em stores em memória; recarregar a página busca-os novamente.
-- A URL da API é variável de build: toda alteração em `VITE_API_URL` exige novo deploy do frontend.
+- A URL da API é variável de build: ao alterá-la, reinicie o servidor de desenvolvimento ou gere um novo build do frontend.
